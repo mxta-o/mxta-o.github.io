@@ -1,0 +1,185 @@
+%-------------------------
+% Resume in Latex
+% Author : Jake Gutierrez
+% Based off of: https://github.com/sb2nov/resume
+% License : MIT
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+
+
+%----------FONT OPTIONS----------
+% sans-serif
+% \usepackage[sfdefault]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+
+% serif
+% \usepackage{CormorantGaramond}
+% \usepackage{charter}
+
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%----------HEADING----------
+% \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+%   \textbf{\href{http://sourabhbajaj.com/}{\Large Sourabh Bajaj}} & Email : \href{mailto:sourabh@sourabhbajaj.com}{sourabh@sourabhbajaj.com}\\
+%   \href{http://sourabhbajaj.com/}{http://www.sourabhbajaj.com} & Mobile : +1-123-456-7890 \\
+% \end{tabular*}
+
+\begin{center}
+    \textbf{\Huge \scshape Jaelan Cruz} \\ \vspace{1pt}
+    \small +1 437-254-5596 $|$ \href{mailto:jaelancruz@yahoo.com}{\underline{jaelancruz@yahoo.com}} $|$ 
+    \href{https://linkedin.com/in/jaelan-cruz}{\underline{LinkedIn}} $|$
+    \href{https://github.com/mxta-o}{\underline{Github}}
+\end{center}
+
+%-----------SUMMARY-----------
+\section{Summary}
+\small{Software engineering student at York University with hands-on experience in full-stack web development. Currently Frontend UI/UX Engineer at Circe, designing React and TypeScript components while expanding into backend development with Python. Proficient in building scalable web applications using Flask, React, and modern frameworks with a focus on creating intuitive user experiences and maintainable code.}
+
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {York University}{Markham, ON}
+      {Bachelor of Applied Science}{Expected Apr. 2028}
+      \resumeItemListStart
+        \resumeItem{\textbf{Relevant Coursework:} Data Structures \& Algorithms, User Interfaces, Software Design, Object-Oriented Programming, Intro to Cloud}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Frontend UI/UX Engineer}{Dec 2025 -- Present}
+      {Circe -- Contract Part-Time}{}
+      \resumeItemListStart
+        \resumeItem{Engineered \textbf{authentication interface} for Saga web application using \textbf{React} and \textbf{TypeScript} with \textbf{Formik} and \textbf{Yup} for robust form validation and error handling}
+        \resumeItem{Architecting \textbf{file upload functionality} to enhance content management capabilities and streamline user workflows within the platform}
+        \resumeItem{Collaborating with cross-functional team of \textbf{engineers and product managers} to transform early-stage concepts into production-ready features}
+        \resumeItem{Expanding technical scope toward \textbf{Python backend development} and \textbf{RESTful API integration} to support full-stack feature implementation}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+          {\textbf{jamSpace} $|$ \emph{Python, Flask, HTML, CSS, JavaScript, JSON}}{Jun. 2025 -- Present}
+          \resumeItemListStart
+            \resumeItem{Developed a \textbf{full-stack productivity web application} using \textbf{Flask} with a modular \textbf{Blueprint architecture} for scalable route management}
+            \resumeItem{Implemented \textbf{4 productivity tools}: Pomodoro Timer, Habit Tracker, Focus Logger, and Time Capsule featuring \textbf{persistent data storage} using JSON file handling}
+            \resumeItem{Built \textbf{CRUD functionality} for habit tracking with date-based completion tracking and \textbf{focus session logging} with categorization, duration tracking, and timestamping}
+            \resumeItem{Designed \textbf{responsive UI templates} using Jinja2 templating engine with custom CSS animations and dynamic form validation}
+          \resumeItemListEnd
+
+    \resumeSubHeadingListEnd
+
+
+
+%
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Programming Languages}{: Java, Python, C, C++, JavaScript, TypeScript, Assembly, HTML5, CSS} \\
+     \textbf{Frameworks}{: React, Flask, TailwindCSS, Formik, Yup, Jinja2} \\
+     \textbf{Databases}{: JSON} \\
+     \textbf{Tools \& APIs}{: Git, GitHub, AWS, REST APIs}
+    }}
+ \end{itemize}
+
+
+%-------------------------------------------
+\end{document}
