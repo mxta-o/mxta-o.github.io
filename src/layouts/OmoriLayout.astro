@@ -1,0 +1,182 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Software Engineering Student | Full-Stack Developer" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="bg-omori-white text-omori-black font-omori antialiased">
+    <!-- SVG Filters for sketch effect -->
+    <svg style="position: absolute; width: 0; height: 0;">
+      <defs>
+        <filter id="sketch-filter">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" result="noise"/>
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="rough-paper">
+          <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="5" result="noise"/>
+          <feDiffuseLighting in="noise" lighting-color="white" surfaceScale="1" result="diffLight">
+            <feDistantLight azimuth="45" elevation="35"/>
+          </feDiffuseLighting>
+        </filter>
+      </defs>
+    </svg>
+
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  @font-face {
+    font-family: 'OMORI';
+    src: url('/font/omori-font.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: 'OMORI', monospace;
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Ccircle cx='10' cy='10' r='8' fill='white' stroke='black' stroke-width='2'/%3E%3C/svg%3E"), auto;
+  }
+
+  /* Selection colors */
+  ::selection {
+    background-color: #000;
+    color: #fff;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #fff;
+    border: 2px solid #000;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #000;
+    border: 2px solid #fff;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #333;
+  }
+
+  /* Sketch border utility */
+  .sketch-border {
+    border: 3px solid #000;
+    box-shadow: 
+      2px 2px 0px #000,
+      -2px -2px 0px #000,
+      2px -2px 0px #000,
+      -2px 2px 0px #000;
+  }
+
+  /* Hand-drawn effect */
+  .hand-drawn {
+    filter: url(#sketch-filter);
+  }
+
+  /* Dialogue box styling */
+  .dialogue-box {
+    background: white;
+    border: 4px solid black;
+    padding: 1.5rem;
+    position: relative;
+    box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.3);
+  }
+
+  .dialogue-box::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 2px solid black;
+    pointer-events: none;
+  }
+
+  /* Button styling */
+  .omori-button {
+    background: white;
+    border: 3px solid black;
+    padding: 0.75rem 1.5rem;
+    font-family: 'OMORI', monospace;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.1s;
+    box-shadow: 4px 4px 0px black;
+    text-transform: uppercase;
+  }
+
+  .omori-button:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px black;
+  }
+
+  .omori-button:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px black;
+  }
+
+  /* Energy meter / Progress bar */
+  .energy-meter {
+    background: white;
+    border: 3px solid black;
+    height: 30px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .energy-meter-fill {
+    background: black;
+    height: 100%;
+    transition: width 0.5s ease;
+    position: relative;
+  }
+
+  .energy-meter-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 255, 255, 0.1) 10px,
+      rgba(255, 255, 255, 0.1) 20px
+    );
+  }
+</style>

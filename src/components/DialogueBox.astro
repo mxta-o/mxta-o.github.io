@@ -1,0 +1,46 @@
+---
+interface Props {
+  title?: string;
+  variant?: 'default' | 'headspace' | 'faraway' | 'serious';
+  animate?: boolean;
+}
+
+const { title, variant = 'default', animate = true } = Astro.props;
+
+const variantStyles = {
+  default: 'bg-white border-black',
+  headspace: 'bg-white border-black',
+  faraway: 'bg-gray-100 border-black',
+  serious: 'bg-black text-white border-white'
+};
+---
+
+<div 
+  class={`dialogue-box ${variantStyles[variant]} ${animate ? 'animate-dialogue-appear' : ''} mb-8`}
+>
+  {title && (
+    <div class="border-b-3 border-black pb-2 mb-4">
+      <h3 class="text-2xl font-bold tracking-wider uppercase">{title}</h3>
+    </div>
+  )}
+  <div class="text-lg leading-relaxed">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .dialogue-box {
+    position: relative;
+    margin: 2rem 0;
+  }
+
+  /* Corner decorations */
+  .dialogue-box::after {
+    content: '▶';
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    animation: blink 1.5s infinite;
+  }
+</style>

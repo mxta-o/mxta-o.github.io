@@ -1,0 +1,345 @@
+---
+import OmoriLayout from '../layouts/OmoriLayout.astro';
+import DialogueBox from '../components/DialogueBox.astro';
+import MenuButton from '../components/MenuButton.astro';
+import EnergyMeter from '../components/EnergyMeter.astro';
+import Portrait from '../components/Portrait.astro';
+---
+
+<OmoriLayout title="JAELAN CRUZ - Portfolio">
+  <!-- Hero Section / Headspace -->
+  <section class="min-h-screen bg-white flex items-center justify-center p-8 relative overflow-hidden">
+    <!-- Sketch background elements -->
+    <div class="absolute inset-0 opacity-5">
+      <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="sketch-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+            <path d="M10,10 L90,10 L90,90 L10,90 Z" fill="none" stroke="black" stroke-width="2" class="hand-drawn"/>
+            <circle cx="50" cy="50" r="20" fill="none" stroke="black" stroke-width="2" class="hand-drawn"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#sketch-pattern)"/>
+      </svg>
+    </div>
+
+    <div class="max-w-6xl w-full relative z-10">
+      <!-- Main Battle UI Style Header -->
+      <div class="dialogue-box animate-fade-in mb-8">
+        <div class="flex items-center justify-between border-b-4 border-black pb-4 mb-4">
+          <div>
+            <h1 class="text-6xl font-bold tracking-wider mb-2">JAELAN CRUZ</h1>
+            <p class="text-xl tracking-wide">SOFTWARE ENGINEER</p>
+          </div>
+          <div class="text-right">
+            <div class="text-4xl mb-2">⚡</div>
+            <div class="text-sm">LV. 99</div>
+          </div>
+        </div>
+        
+        <!-- Stats Display -->
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <EnergyMeter name="SKILLS" current={99} max={100} color="energy" />
+          <EnergyMeter name="EXPERIENCE" current={85} max={100} color="juice" />
+        </div>
+
+        <div class="border-t-4 border-black pt-4">
+          <p class="text-lg leading-relaxed">
+            Software engineering student at York University with hands-on experience in full-stack web development. 
+            Currently Frontend UI/UX Engineer at Circe, designing React and TypeScript components while expanding 
+            into backend development with Python.
+          </p>
+        </div>
+
+        <!-- Contact Info as Menu Buttons -->
+        <div class="grid grid-cols-2 gap-4 mt-6">
+          <a href="mailto:jaelancruz@yahoo.com" class="omori-button text-center">
+            📧 EMAIL
+          </a>
+          <a href="https://github.com/mxta-o" target="_blank" class="omori-button text-center">
+            💻 GITHUB
+          </a>
+          <a href="https://linkedin.com/in/jaelan-cruz" target="_blank" class="omori-button text-center">
+            🔗 LINKEDIN
+          </a>
+          <a href="tel:+14372545596" class="omori-button text-center">
+            📞 PHONE
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education Section -->
+  <section class="min-h-screen bg-white p-8 border-t-4 border-black">
+    <div class="max-w-6xl mx-auto">
+      <div class="dialogue-box">
+        <h2 class="text-4xl font-bold mb-6 border-b-4 border-black pb-4 uppercase tracking-wider">
+          📚 EDUCATION
+        </h2>
+        
+        <div class="space-y-4">
+          <div class="border-4 border-black p-6 bg-white">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h3 class="text-2xl font-bold">YORK UNIVERSITY</h3>
+                <p class="text-lg mt-2">Bachelor of Applied Science</p>
+              </div>
+              <div class="text-right">
+                <div class="text-lg font-bold">Markham, ON</div>
+                <div class="mt-2">Expected Apr. 2028</div>
+              </div>
+            </div>
+            
+            <div class="border-t-3 border-black pt-4 mt-4">
+              <div class="flex items-start">
+                <span class="mr-3 text-2xl">▶</span>
+                <div>
+                  <span class="font-bold">RELEVANT COURSEWORK:</span>
+                  <span class="ml-2">Data Structures & Algorithms, User Interfaces, Software Design, 
+                  Object-Oriented Programming, Intro to Cloud</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience Section - Battle Style -->
+  <section class="min-h-screen bg-white p-8 border-t-4 border-black">
+    <div class="max-w-6xl mx-auto">
+      <div class="dialogue-box">
+        <h2 class="text-4xl font-bold mb-6 border-b-4 border-black pb-4 uppercase tracking-wider">
+          ⚔️ EXPERIENCE
+        </h2>
+
+        <!-- Circe Position -->
+        <div class="border-4 border-black p-6 bg-white mb-6">
+          <div class="flex justify-between items-start mb-4 border-b-3 border-black pb-3">
+            <div>
+              <h3 class="text-2xl font-bold">FRONTEND UI/UX ENGINEER</h3>
+              <p class="text-lg mt-1 italic">Circe — Contract Part-Time</p>
+            </div>
+            <div class="text-right text-lg">
+              Dec 2025 — Present
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex items-start">
+              <span class="mr-3 text-xl flex-shrink-0">▸</span>
+              <p>Engineered <strong>authentication interface</strong> for Saga web application using <strong>React</strong> and 
+              <strong>TypeScript</strong> with <strong>Formik</strong> and <strong>Yup</strong> for robust form validation 
+              and error handling</p>
+            </div>
+            <div class="flex items-start">
+              <span class="mr-3 text-xl flex-shrink-0">▸</span>
+              <p>Architecting <strong>file upload functionality</strong> to enhance content management capabilities and 
+              streamline user workflows within the platform</p>
+            </div>
+            <div class="flex items-start">
+              <span class="mr-3 text-xl flex-shrink-0">▸</span>
+              <p>Collaborating with cross-functional team of <strong>engineers and product managers</strong> to transform 
+              early-stage concepts into production-ready features</p>
+            </div>
+            <div class="flex items-start">
+              <span class="mr-3 text-xl flex-shrink-0">▸</span>
+              <p>Expanding technical scope toward <strong>Python backend development</strong> and <strong>RESTful API 
+              integration</strong> to support full-stack feature implementation</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section - Headspace Style -->
+  <section class="min-h-screen bg-white p-8 border-t-4 border-black">
+    <div class="max-w-6xl mx-auto">
+      <div class="dialogue-box">
+        <h2 class="text-4xl font-bold mb-6 border-b-4 border-black pb-4 uppercase tracking-wider">
+          🎮 PROJECTS
+        </h2>
+
+        <!-- jamSpace Project -->
+        <div class="border-4 border-black p-6 bg-white mb-6">
+          <div class="flex justify-between items-start mb-4 border-b-3 border-black pb-3">
+            <div>
+              <h3 class="text-2xl font-bold">JAMSPACE</h3>
+              <p class="text-sm mt-1">
+                <span class="inline-block bg-black text-white px-2 py-1 mr-2">PYTHON</span>
+                <span class="inline-block bg-black text-white px-2 py-1 mr-2">FLASK</span>
+                <span class="inline-block bg-black text-white px-2 py-1 mr-2">HTML/CSS</span>
+                <span class="inline-block bg-black text-white px-2 py-1 mr-2">JAVASCRIPT</span>
+                <span class="inline-block bg-black text-white px-2 py-1">JSON</span>
+              </p>
+            </div>
+            <div class="text-right text-lg">
+              Jun. 2025 — Present
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex items-start">
+              <span class="mr-3 text-xl flex-shrink-0">▸</span>
+              <p>Developed a <strong>full-stack productivity web application</strong> using <strong>Flask</strong> with a 
+              modular <strong>Blueprint architecture</strong> for scalable route management</p>
+            </div>
+            <div class="flex items-start">
+              <span class="mr-3 text-xl flex-shrink-0">▸</span>
+              <p>Implemented <strong>4 productivity tools</strong>: Pomodoro Timer, Habit Tracker, Focus Logger, and Time 
+              Capsule featuring <strong>persistent data storage</strong> using JSON file handling</p>
+            </div>
+            <div class="flex items-start">
+              <span class="mr-3 text-xl flex-shrink-0">▸</span>
+              <p>Built <strong>CRUD functionality</strong> for habit tracking with date-based completion tracking and 
+              <strong>focus session logging</strong> with categorization, duration tracking, and timestamping</p>
+            </div>
+            <div class="flex items-start">
+              <span class="mr-3 text-xl flex-shrink-0">▸</span>
+              <p>Designed <strong>responsive UI templates</strong> using Jinja2 templating engine with custom CSS animations 
+              and dynamic form validation</p>
+            </div>
+          </div>
+
+          <!-- Project Stats -->
+          <div class="mt-4 pt-4 border-t-3 border-black">
+            <div class="grid grid-cols-3 gap-4">
+              <EnergyMeter name="COMPLETION" current={90} max={100} color="energy" />
+              <EnergyMeter name="CODE QUALITY" current={95} max={100} color="juice" />
+              <EnergyMeter name="IMPACT" current={88} max={100} color="heart" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Skills - Party Menu Style -->
+  <section class="min-h-screen bg-white p-8 border-t-4 border-black">
+    <div class="max-w-6xl mx-auto">
+      <div class="dialogue-box">
+        <h2 class="text-4xl font-bold mb-6 border-b-4 border-black pb-4 uppercase tracking-wider">
+          ⚡ TECHNICAL SKILLS
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Programming Languages -->
+          <div class="border-4 border-black p-6 bg-white">
+            <h3 class="text-xl font-bold mb-4 border-b-3 border-black pb-2">PROGRAMMING LANGUAGES</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="skill-badge">JAVA</span>
+              <span class="skill-badge">PYTHON</span>
+              <span class="skill-badge">C</span>
+              <span class="skill-badge">C++</span>
+              <span class="skill-badge">JAVASCRIPT</span>
+              <span class="skill-badge">TYPESCRIPT</span>
+              <span class="skill-badge">ASSEMBLY</span>
+              <span class="skill-badge">HTML5</span>
+              <span class="skill-badge">CSS</span>
+            </div>
+          </div>
+
+          <!-- Frameworks -->
+          <div class="border-4 border-black p-6 bg-white">
+            <h3 class="text-xl font-bold mb-4 border-b-3 border-black pb-2">FRAMEWORKS</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="skill-badge">REACT</span>
+              <span class="skill-badge">FLASK</span>
+              <span class="skill-badge">TAILWINDCSS</span>
+              <span class="skill-badge">FORMIK</span>
+              <span class="skill-badge">YUP</span>
+              <span class="skill-badge">JINJA2</span>
+              <span class="skill-badge">ASTRO</span>
+              <span class="skill-badge">SVELTE</span>
+              <span class="skill-badge">THREE.JS</span>
+            </div>
+          </div>
+
+          <!-- Databases -->
+          <div class="border-4 border-black p-6 bg-white">
+            <h3 class="text-xl font-bold mb-4 border-b-3 border-black pb-2">DATABASES</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="skill-badge">JSON</span>
+            </div>
+          </div>
+
+          <!-- Tools & APIs -->
+          <div class="border-4 border-black p-6 bg-white">
+            <h3 class="text-xl font-bold mb-4 border-b-3 border-black pb-2">TOOLS & APIS</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="skill-badge">GIT</span>
+              <span class="skill-badge">GITHUB</span>
+              <span class="skill-badge">AWS</span>
+              <span class="skill-badge">REST APIS</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overall Skill Meters -->
+        <div class="mt-8 border-t-4 border-black pt-6">
+          <h3 class="text-xl font-bold mb-4">OVERALL STATS</h3>
+          <div class="grid md:grid-cols-2 gap-4">
+            <EnergyMeter name="FRONTEND DEVELOPMENT" current={95} max={100} color="energy" />
+            <EnergyMeter name="BACKEND DEVELOPMENT" current={80} max={100} color="juice" />
+            <EnergyMeter name="UI/UX DESIGN" current={90} max={100} color="heart" />
+            <EnergyMeter name="PROBLEM SOLVING" current={92} max={100} color="energy" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer / End Battle Screen -->
+  <section class="bg-black text-white p-8 border-t-4 border-white">
+    <div class="max-w-6xl mx-auto">
+      <div class="dialogue-box bg-black text-white border-white">
+        <div class="text-center">
+          <p class="text-2xl mb-4">THANKS FOR VISITING!</p>
+          <p class="text-lg mb-6">Let's create something amazing together.</p>
+          
+          <div class="flex justify-center gap-4">
+            <a href="mailto:jaelancruz@yahoo.com" class="omori-button bg-black text-white border-white hover:bg-white hover:text-black">
+              REACH OUT
+            </a>
+          </div>
+
+          <div class="mt-8 pt-8 border-t-2 border-white">
+            <p class="text-sm opacity-75">© 2026 JAELAN CRUZ • INSPIRED BY OMORI</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</OmoriLayout>
+
+<style>
+  .skill-badge {
+    display: inline-block;
+    background: white;
+    border: 2px solid black;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: bold;
+    transition: all 0.2s;
+    cursor: default;
+  }
+
+  .skill-badge:hover {
+    background: black;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 3px 3px 0px black;
+  }
+
+  /* Sketch animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+</style>
