@@ -8,5 +8,10 @@ export default defineConfig({
   integrations: [
     tailwind(),
     svelte()
-  ]
+  ],
+  vite: {
+    ssr: {
+      noExternal: ['three', '@threlte/core', '@threlte/extras']
+    }
+  }
 });
