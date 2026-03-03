@@ -20,19 +20,19 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
     <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/70 -z-5"></div>
     
     <div class="max-w-7xl mx-auto px-6 py-32 relative z-10">
-      <div class="text-left max-w-3xl space-y-6 animate-fade-in">
-        <h1 class="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-tight">
+      <div class="text-left max-w-3xl space-y-6">
+        <h1 class="hero-title text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-tight">
           Jaelan <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-400 to-accent-200">Cruz</span>
         </h1>
-        <p class="text-2xl md:text-3xl text-accent-300 font-medium">
+        <p class="hero-subtitle text-2xl md:text-3xl text-accent-300 font-medium">
           Frontend UI/UX Engineer
         </p>
-        <p class="text-base md:text-lg text-gray-400 max-w-xl leading-relaxed">
+        <p class="hero-description text-base md:text-lg text-gray-400 max-w-xl leading-relaxed">
           Software engineering student crafting intuitive digital experiences<br />
           with modern web technologies
         </p>
         
-        <div class="flex items-center gap-4 pt-6">
+        <div class="hero-buttons flex items-center gap-4 pt-6">
           <a href="#about" class="px-8 py-3 bg-accent-400 text-black rounded-lg hover:bg-accent-300 transition-all hover:shadow-xl hover:shadow-accent-400/30 font-medium">
             Explore My Work
           </a>
@@ -54,48 +54,45 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
   <!-- About Section -->
   <section id="about" class="min-h-screen flex items-center py-20 bg-gradient-to-b from-black via-gray-900/50 to-black">
     <div class="max-w-7xl mx-auto px-6">
-      <AnimatedSection client:visible>
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-          <div class="space-y-6">
-            <h2 class="text-5xl font-bold">
-              About <span class="text-accent-400">Me</span>
-            </h2>
-            <p class="text-lg text-gray-300 leading-relaxed">
-              Software engineering student at <span class="font-semibold text-white">York University</span> with hands-on experience in full-stack web development. Currently Frontend UI/UX Engineer at <span class="font-semibold text-white">Circe</span>, designing React and TypeScript components while expanding into backend development with Python.
-            </p>
-            <p class="text-lg text-gray-300 leading-relaxed">
-              Proficient in building scalable web applications using Flask, React, and modern frameworks with a focus on creating intuitive user experiences and maintainable code.
-            </p>
-            <div class="pt-4">
-              <p class="text-sm text-gray-400 mb-2">Education</p>
-              <p class="text-lg font-semibold text-white">York University</p>
-              <p class="text-gray-300">Bachelor of Applied Science • Expected Apr. 2028</p>
-              <p class="text-sm text-gray-400 mt-2">Relevant Coursework: Data Structures & Algorithms, User Interfaces, Software Design, Object-Oriented Programming, Intro to Cloud</p>
-            </div>
-          </div>
-          
-          <div class="h-96 relative">
-            <div class="absolute inset-0 bg-gradient-to-br from-accent-400/10 to-accent-600/10 rounded-2xl border border-accent-400/20"></div>
-            <div class="absolute inset-0">
-              <ThreeScene type="cube" color="#0ea5e9" animate={true} client:visible />
-            </div>
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="animate-about space-y-6">
+          <h2 class="text-5xl font-bold">
+            About <span class="text-accent-400">Me</span>
+          </h2>
+          <p class="text-lg text-gray-300 leading-relaxed">
+            Software engineering student at <span class="font-semibold text-white">York University</span> with hands-on experience in full-stack web development. Currently Frontend UI/UX Engineer at <span class="font-semibold text-white">Circe</span>, designing React and TypeScript components while expanding into backend development with Python.
+          </p>
+          <p class="text-lg text-gray-300 leading-relaxed">
+            Proficient in building scalable web applications using Flask, React, and modern frameworks with a focus on creating intuitive user experiences and maintainable code.
+          </p>
+          <div class="pt-4">
+            <p class="text-sm text-gray-400 mb-2">Education</p>
+            <p class="text-lg font-semibold text-white">York University</p>
+            <p class="text-gray-300">Bachelor of Applied Science • Expected Apr. 2028</p>
+            <p class="text-sm text-gray-400 mt-2">Relevant Coursework: Data Structures & Algorithms, User Interfaces, Software Design, Object-Oriented Programming, Intro to Cloud</p>
           </div>
         </div>
-      </AnimatedSection>
+        
+        <div class="h-96 relative">
+          <div class="absolute inset-0 bg-gradient-to-br from-accent-400/10 to-accent-600/10 rounded-2xl border border-accent-400/20"></div>
+          <div class="absolute inset-0">
+            <ThreeScene type="cube" color="#0ea5e9" animate={true} client:visible />
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Skills Section -->
   <section id="skills" class="min-h-screen flex items-center py-20 bg-black">
     <div class="max-w-7xl mx-auto px-6 w-full">
-      <AnimatedSection client:visible>
-        <h2 class="text-5xl font-bold text-center mb-16">
-          Technical <span class="text-accent-400">Skills</span>
-        </h2>
-        
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <!-- Programming Languages -->
-          <div class="group p-6 rounded-2xl bg-gray-900/50 border-2 border-gray-800 hover:border-accent-400 transition-all hover:shadow-xl hover:shadow-accent-400/10 backdrop-blur-sm">
+      <h2 class="animate-heading text-5xl font-bold text-center mb-16">
+        Technical <span class="text-accent-400">Skills</span>
+      </h2>
+      
+      <div class="animate-cards grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Programming Languages -->
+        <div class="animate-card group p-6 rounded-2xl bg-gray-900/50 border-2 border-gray-800 hover:border-accent-400 transition-all hover:shadow-xl hover:shadow-accent-400/10 backdrop-blur-sm">
             <div class="w-12 h-12 bg-accent-400/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6 text-accent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
@@ -108,7 +105,7 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
           </div>
 
           <!-- Frameworks -->
-          <div class="group p-6 rounded-2xl bg-gray-900/50 border-2 border-gray-800 hover:border-accent-400 transition-all hover:shadow-xl hover:shadow-accent-400/10 backdrop-blur-sm">
+          <div class="animate-card group p-6 rounded-2xl bg-gray-900/50 border-2 border-gray-800 hover:border-accent-400 transition-all hover:shadow-xl hover:shadow-accent-400/10 backdrop-blur-sm">
             <div class="w-12 h-12 bg-accent-400/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6 text-accent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path>
@@ -116,12 +113,12 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
             </div>
             <h3 class="text-xl font-semibold mb-3 text-white">Frameworks</h3>
             <p class="text-gray-400 text-sm leading-relaxed">
-              React • Flask • TailwindCSS • Formik • Yup • Jinja2
+              React • Astro • Svelte • Three.js • Flask • TailwindCSS • Formik • Yup • Jinja2
             </p>
           </div>
 
           <!-- Databases -->
-          <div class="group p-6 rounded-2xl bg-gray-900/50 border-2 border-gray-800 hover:border-accent-400 transition-all hover:shadow-xl hover:shadow-accent-400/10 backdrop-blur-sm">
+          <div class="animate-card group p-6 rounded-2xl bg-gray-900/50 border-2 border-gray-800 hover:border-accent-400 transition-all hover:shadow-xl hover:shadow-accent-400/10 backdrop-blur-sm">
             <div class="w-12 h-12 bg-accent-400/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6 text-accent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
@@ -129,42 +126,44 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
             </div>
             <h3 class="text-xl font-semibold mb-3 text-white">Databases</h3>
             <p class="text-gray-400 text-sm leading-relaxed">
-              JSON • SQL • NoSQL
+              JSON • <span class="italic">PostgreSQL (learning)</span>
             </p>
           </div>
 
           <!-- Tools & APIs -->
-          <div class="group p-6 rounded-2xl bg-gray-900/50 border-2 border-gray-800 hover:border-accent-400 transition-all hover:shadow-xl hover:shadow-accent-400/10 backdrop-blur-sm">
+          <div class="animate-card group p-6 rounded-2xl bg-gray-900/50 border-2 border-gray-800 hover:border-accent-400 transition-all hover:shadow-xl hover:shadow-accent-400/10 backdrop-blur-sm">
             <div class="w-12 h-12 bg-accent-400/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6 text-accent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
               </svg>
             </div>
-            <h3 class="text-xl font-semibold mb-3 text-white">Tools & APIs</h3>
+            <h3 class="text-xl font-semibold mb-3 text-white">Tools & Platforms</h3>
             <p class="text-gray-400 text-sm leading-relaxed">
-              Git • GitHub • AWS • REST APIs
+              Git • GitHub • AWS • Docker • VS Code • Linux (basic CLI) • GitHub Actions
+            </p>
+            <h3 class="text-xl font-semibold mb-3 text-white mt-6">AI & Automation</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">
+              GPT-4o • Claude Sonnet 3.5 • Copilot (code review, prototyping, workflow automation)
             </p>
           </div>
         </div>
-      </AnimatedSection>
     </div>
   </section>
 
   <!-- Experience Section -->
   <section id="experience" class="min-h-screen flex items-center py-20 bg-gradient-to-b from-black via-gray-900/30 to-black">
     <div class="max-w-5xl mx-auto px-6 w-full">
-      <AnimatedSection client:visible>
-        <h2 class="text-5xl font-bold text-center mb-16">
-          Work <span class="text-accent-400">Experience</span>
-        </h2>
+      <h2 class="animate-heading text-5xl font-bold text-center mb-16">
+        Work <span class="text-accent-400">Experience</span>
+      </h2>
+      
+      <div class="relative">
+        <!-- Timeline line -->
+        <div class="absolute left-0 md:left-1/2 top-0 bottom-0 w-0.5 bg-accent-400/30 transform md:-translate-x-1/2"></div>
         
-        <div class="relative">
-          <!-- Timeline line -->
-          <div class="absolute left-0 md:left-1/2 top-0 bottom-0 w-0.5 bg-accent-400/30 transform md:-translate-x-1/2"></div>
-          
-          <!-- Experience Item -->
-          <div class="mb-8 flex flex-col md:flex-row items-start md:items-center w-full">
+        <!-- Experience Item -->
+        <div class="animate-timeline mb-8 flex flex-col md:flex-row items-start md:items-center w-full">
             <div class="md:w-5/12 md:text-right mb-4 md:mb-0 md:pr-8">
               <h3 class="text-2xl font-bold text-white">Frontend UI/UX Engineer</h3>
               <p class="text-accent-400 font-semibold">Circe</p>
@@ -178,37 +177,28 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
             <div class="md:w-5/12 md:pl-8">
               <p class="text-sm text-gray-400 font-medium mb-3">Dec 2025 – Present</p>
               <ul class="space-y-2 text-gray-300">
-                <li class="flex items-start gap-2">
-                  <span class="text-accent-400 mt-1.5">•</span>
-                  <span class="text-sm">Engineered authentication interface for Saga web application using React and TypeScript with Formik and Yup for robust form validation</span>
-                </li>
-                <li class="flex items-start gap-2">
-                  <span class="text-accent-400 mt-1.5">•</span>
-                  <span class="text-sm">Architecting file upload functionality to enhance content management capabilities</span>
-                </li>
-                <li class="flex items-start gap-2">
-                  <span class="text-accent-400 mt-1.5">•</span>
-                  <span class="text-sm">Expanding technical scope toward Python backend development and RESTful API integration</span>
-                </li>
+                <li class="flex items-start gap-2"><span class="text-accent-400 mt-1.5">•</span><span class="text-sm">Refactored and modularized settings/profile features, reducing codebase by <span class="font-bold">2,500+ lines</span> across <span class="font-bold">8+ files</span></span></li>
+                <li class="flex items-start gap-2"><span class="text-accent-400 mt-1.5">•</span><span class="text-sm">Improved authentication logic and validation for <span class="font-bold">5 user flows</span>, boosting <span class="font-bold">security</span> and <span class="font-bold">UX</span></span></li>
+                <li class="flex items-start gap-2"><span class="text-accent-400 mt-1.5">•</span><span class="text-sm">Collaborated with <span class="font-bold">6+ contributors</span>, resolving merge conflicts and maintaining code quality</span></li>
+                <li class="flex items-start gap-2"><span class="text-accent-400 mt-1.5">•</span><span class="text-sm">Centralized validation schemas, enhanced error/status messaging, and reduced <span class="font-bold">support requests</span></span></li>
+                <li class="flex items-start gap-2"><span class="text-accent-400 mt-1.5">•</span><span class="text-sm">Expanding to backend/cloud: building RESTful APIs and infrastructure with <span class="font-bold">Python</span> & <span class="font-bold">AWS</span></span></li>
               </ul>
             </div>
           </div>
         </div>
-      </AnimatedSection>
     </div>
   </section>
 
   <!-- Projects Section -->
   <section id="projects" class="min-h-screen flex items-center py-20 bg-black">
     <div class="max-w-7xl mx-auto px-6 w-full">
-      <AnimatedSection client:visible>
-        <h2 class="text-5xl font-bold text-center mb-16">
-          Featured <span class="text-accent-400">Projects</span>
-        </h2>
+      <h2 class="animate-heading text-5xl font-bold text-center mb-16">
+        Featured <span class="text-accent-400">Projects</span>
+      </h2>
         
         <div class="grid md:grid-cols-2 gap-8">
           <!-- Project: jamSpace -->
-          <div class="group relative overflow-hidden rounded-2xl bg-gray-900/50 border-2 border-gray-800 hover:border-accent-400 transition-all hover:shadow-2xl hover:shadow-accent-400/20 backdrop-blur-sm">
+          <div class="animate-project group relative overflow-hidden rounded-2xl bg-gray-900/50 border-2 border-gray-800 hover:border-accent-400 transition-all hover:shadow-2xl hover:shadow-accent-400/20 backdrop-blur-sm">
             <div class="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 opacity-10">
               <ThreeScene type="sphere" color="#0ea5e9" animate={false} client:visible />
             </div>
@@ -257,7 +247,7 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
           </div>
 
           <!-- Placeholder for future project -->
-          <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900/30 to-gray-900/50 border-2 border-dashed border-gray-700 hover:border-accent-400/50 transition-all backdrop-blur-sm">
+          <div class="animate-project group relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900/30 to-gray-900/50 border-2 border-dashed border-gray-700 hover:border-accent-400/50 transition-all backdrop-blur-sm">
             <div class="p-8 flex flex-col items-center justify-center h-full text-center min-h-[400px]">
               <div class="w-16 h-16 bg-accent-400/10 rounded-full flex items-center justify-center mb-4 border border-accent-400/20">
                 <svg class="w-8 h-8 text-accent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -269,7 +259,6 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
             </div>
           </div>
         </div>
-      </AnimatedSection>
     </div>
   </section>
 
