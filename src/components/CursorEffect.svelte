@@ -6,7 +6,7 @@
     const E = {
       debug: true,
       friction: 0.5,
-      trails: 20,
+      trails: 30,
       size: 50,
       dampening: 0.25,
       tension: 0.98,
