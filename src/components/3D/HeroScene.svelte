@@ -103,7 +103,7 @@
 </T.Mesh>
 
 <!-- Additional floating elements for depth -->
-<T.Mesh position={[-2, 2, -5]} rotation.z={0.5}>
+<T.Mesh position={[5, 3.5, -4]} rotation.z={0.5}>
   <T.TorusGeometry args={[0.8, 0.2, 16, 32]} />
   <T.MeshStandardMaterial
     color="#38bdf8"
