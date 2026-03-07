@@ -84,18 +84,6 @@
       ctx.closePath();
     };
 
-    // ── Burst particles ──
-    interface Particle { x: number; y: number; vx: number; vy: number; life: number; }
-    let particles: Particle[] = [];
-
-    function spawnBurst(x: number, y: number) {
-      for (let i = 0; i < 8; i++) {
-        const angle = (i / 8) * Math.PI * 2 + Math.random() * 0.4;
-        const speed = 2.5 + Math.random() * 3;
-        particles.push({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, life: 1 });
-      }
-    }
-
     // ── Event handlers ──
     function onMove(e: MouseEvent | TouchEvent) {
       if ((e as TouchEvent).touches) {
@@ -108,7 +96,7 @@
       // Restart the loop if it was paused by a smooth scroll
       if (performance.now() - lastRafTime > 100) restartIfNeeded();
     }
-    function onMousedown(e: MouseEvent) { clicking = true; spawnBurst(e.clientX, e.clientY); }
+    function onMousedown() { clicking = true; }
     function onMouseup() { clicking = false; }
 
     const onEnterInteractive = () => { hovered = true; };
@@ -137,18 +125,6 @@
       ctx.lineWidth = 1;
       for (const line of lines) { line.update(); line.draw(); }
 
-      // Burst particles
-      particles = particles.filter(p => p.life > 0);
-      for (const p of particles) {
-        p.x += p.vx; p.y += p.vy;
-        p.vx *= 0.88; p.vy *= 0.88;
-        p.life -= 0.045;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, 3 * p.life, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(199, 90%, 70%, ${p.life})`;
-        ctx.fill();
-      }
-
       // Dot — snaps instantly
       dotEl.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
 
@@ -165,6 +141,9 @@
 
     function restartIfNeeded() {
       if (running) {
+        // Teleport ring to current mouse position so it doesn't snap
+        ringX = mouseX;
+        ringY = mouseY;
         cancelAnimationFrame(rafId);
         render();
       }
@@ -193,6 +172,7 @@
     document.addEventListener('mouseup', onMouseup);
     window.addEventListener('resize', resizeCanvas);
     window.addEventListener('focus', restartIfNeeded);
+    window.addEventListener('scroll', restartIfNeeded, { passive: true });
     document.addEventListener('visibilitychange', () => { if (!document.hidden) restartIfNeeded(); });
     // Bind after a tick so all DOM elements exist
     setTimeout(bindInteractiveElements, 300);
@@ -208,6 +188,7 @@
       document.removeEventListener('mouseup', onMouseup);
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('focus', restartIfNeeded);
+      window.removeEventListener('scroll', restartIfNeeded);
     };
   });
 </script>
@@ -220,11 +201,11 @@
 <!-- Dot: snaps instantly to cursor -->
 <div
   id="cursor-dot"
-  style="position:fixed;top:0;left:0;width:8px;height:8px;background:#0ea5e9;border-radius:50%;pointer-events:none;z-index:9999;will-change:transform;"
+  style="position:fixed;top:0;left:0;width:8px;height:8px;background:#0ea5e9;border-radius:50%;pointer-events:none;z-index:20000;will-change:transform;"
 ></div>
 
 <!-- Ring: lags behind, scales on hover/click -->
 <div
   id="cursor-ring"
-  style="position:fixed;top:0;left:0;width:34px;height:34px;border:1.5px solid rgba(14,165,233,0.65);border-radius:50%;pointer-events:none;z-index:9999;will-change:transform;transition:width 0.18s ease,height 0.18s ease,opacity 0.18s ease;"
+  style="position:fixed;top:0;left:0;width:34px;height:34px;border:1.5px solid rgba(14,165,233,0.65);border-radius:50%;pointer-events:none;z-index:20000;will-change:transform;transition:width 0.18s ease,height 0.18s ease,opacity 0.18s ease;"
 ></div>
