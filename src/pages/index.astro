@@ -372,7 +372,7 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
 
     const maybeAnimate = () => {
       if (contributionsReady && sectionVisible) {
-        statsGrid.querySelectorAll('[data-count]').forEach(animateCount);
+        statsGrid.querySelectorAll<HTMLElement>('[data-count]').forEach(animateCount);
       }
     };
 
