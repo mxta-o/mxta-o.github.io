@@ -74,10 +74,36 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
             <p class="text-sm text-gray-400 mt-2">Relevant Coursework: Data Structures & Algorithms, User Interfaces, Software Design, Object-Oriented Programming, Intro to Cloud</p>
           </div>
         </div>
-        <div class="h-96 relative">
-          <div class="absolute inset-0 bg-gradient-to-br from-accent-400/10 to-accent-600/10 rounded-2xl border border-accent-400/20"></div>
-          <div class="absolute inset-0">
-            <ThreeScene type="cube" color="#0ea5e9" animate={true} client:visible />
+        <div class="h-96">
+          <div class="h-full bg-gradient-to-br from-accent-400/10 to-accent-600/10 rounded-2xl border border-accent-400/20 p-8 flex flex-col justify-between">
+            <div id="about-stats" class="grid grid-cols-2 gap-4">
+              <div class="text-center p-4 rounded-xl bg-black/40 border border-accent-400/10">
+                <div class="text-4xl font-bold text-accent-400" data-count="8" data-suffix="">0</div>
+                <div class="text-sm text-gray-400 mt-1">Languages</div>
+              </div>
+              <div class="text-center p-4 rounded-xl bg-black/40 border border-accent-400/10">
+                <div class="text-4xl font-bold text-accent-400" data-count="10" data-suffix="+">0</div>
+                <div class="text-sm text-gray-400 mt-1">Frameworks</div>
+              </div>
+              <div class="text-center p-4 rounded-xl bg-black/40 border border-accent-400/10">
+                <div class="text-4xl font-bold text-accent-400" data-count="0" data-suffix="" data-stat="contributions">—</div>
+                <div class="text-sm text-gray-400 mt-1">GitHub Contributions</div>
+              </div>
+              <div class="text-center p-4 rounded-xl bg-black/40 border border-accent-400/10">
+                <div class="text-4xl font-bold text-accent-400" data-count="20" data-suffix="+">0</div>
+                <div class="text-sm text-gray-400 mt-1">Technologies Used</div>
+              </div>
+            </div>
+            <div class="space-y-3">
+              <div class="flex items-center gap-3 text-sm text-gray-300">
+                <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse flex-shrink-0"></span>
+                <span>Fullstack Engineer at <span class="font-semibold text-white">Circe</span></span>
+              </div>
+              <div class="flex items-center gap-3 text-sm text-gray-300">
+                <span class="w-2 h-2 rounded-full bg-accent-400 flex-shrink-0"></span>
+                <span>BASc Computer Science (CSSD) · <span class="font-semibold text-white">York University</span> '28</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -324,4 +350,60 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
       </div>
     </div>
   </footer>
+<script>
+  const statsGrid = document.getElementById('about-stats');
+  if (statsGrid) {
+    const animateCount = (el) => {
+      const target = parseInt(el.dataset.count);
+      if (!target) return;
+      const suffix = el.dataset.suffix || '';
+      const duration = 1500;
+      const start = performance.now();
+      const update = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(eased * target) + suffix;
+        if (progress < 1) requestAnimationFrame(update);
+      };
+      requestAnimationFrame(update);
+    };
+
+    let contributionsReady = false;
+    let sectionVisible = false;
+
+    const maybeAnimate = () => {
+      if (contributionsReady && sectionVisible) {
+        statsGrid.querySelectorAll('[data-count]').forEach(animateCount);
+      }
+    };
+
+    // Fetch live contribution count (no auth needed — public scraper API)
+    fetch('https://github-contributions-api.jogruber.de/v4/mxta-o?y=last')
+      .then(r => r.json())
+      .then(data => {
+        const count = data?.total?.lastYear ?? 0;
+        const contribEl = statsGrid.querySelector('[data-stat="contributions"]');
+        if (contribEl && count > 0) contribEl.dataset.count = count;
+        contributionsReady = true;
+        maybeAnimate();
+      })
+      .catch(() => {
+        // API failed — fall back to a dash so nothing looks broken
+        contributionsReady = true;
+        maybeAnimate();
+      });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          sectionVisible = true;
+          maybeAnimate();
+          observer.unobserve(statsGrid);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    observer.observe(statsGrid);
+  }
+</script>
 </BaseLayout>

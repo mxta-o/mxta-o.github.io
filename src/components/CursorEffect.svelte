@@ -2,144 +2,171 @@
   import { onMount } from 'svelte';
 
   onMount(() => {
-    let ctx: any, f: any, e = 0, pos: any = {}, lines: any[] = [];
+    // ── Hide native cursor ──
+    document.body.style.cursor = 'none';
+
+    const dotEl = document.getElementById('cursor-dot') as HTMLElement;
+    const ringEl = document.getElementById('cursor-ring') as HTMLElement;
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let ringX = mouseX, ringY = mouseY;
+    let hovered = false;
+    let clicking = false;
+
+    // ── Trail canvas ──
+    let ctx: any, f: any, pos: any = { x: mouseX, y: mouseY }, lines: any[] = [];
     const E = {
-      debug: true,
       friction: 0.5,
-      trails: 30,
+      trails: 25,
       size: 50,
       dampening: 0.25,
       tension: 0.98,
     };
 
-    function Node(this: any) {
-      this.x = 0;
-      this.y = 0;
-      this.vy = 0;
-      this.vx = 0;
-    }
+    // ── Trail node & line classes ──
+    function TrailNode(this: any) { this.x = 0; this.y = 0; this.vx = 0; this.vy = 0; }
 
-    function n(this: any, e: any) {
-      this.init(e || {});
+    function Oscillator(this: any, e: any) {
+      this.phase = e.phase || 0;
+      this.offset = e.offset || 0;
+      this.frequency = e.frequency || 0.001;
+      this.amplitude = e.amplitude || 1;
     }
-    n.prototype = {
-      init: function (e: any) {
-        this.phase = e.phase || 0;
-        this.offset = e.offset || 0;
-        this.frequency = e.frequency || 0.001;
-        this.amplitude = e.amplitude || 1;
-      },
-      update: function () {
-        this.phase += this.frequency;
-        return this.offset + Math.sin(this.phase) * this.amplitude;
-      },
-      value: function () {
-        return e;
-      },
+    Oscillator.prototype.update = function () {
+      this.phase += this.frequency;
+      return this.offset + Math.sin(this.phase) * this.amplitude;
     };
 
-    function Line(this: any, e: any) {
-      this.init(e || {});
+    function TrailLine(this: any, e: any) {
+      this.spring = e.spring + 0.1 * Math.random() - 0.02;
+      this.friction = E.friction + 0.01 * Math.random() - 0.002;
+      this.nodes = [];
+      for (let i = 0; i < E.size; i++) {
+        const t = new (TrailNode as any)();
+        t.x = pos.x; t.y = pos.y;
+        this.nodes.push(t);
+      }
     }
-    Line.prototype = {
-      init: function (e: any) {
-        this.spring = e.spring + 0.1 * Math.random() - 0.02;
-        this.friction = E.friction + 0.01 * Math.random() - 0.002;
-        this.nodes = [];
-        for (let n = 0; n < E.size; n++) {
-          let t = new (Node as any)();
-          t.x = pos.x || window.innerWidth / 2;
-          t.y = pos.y || window.innerHeight / 2;
-          this.nodes.push(t);
+    TrailLine.prototype.update = function () {
+      let e = this.spring, t = this.nodes[0];
+      t.vx += (pos.x - t.x) * e;
+      t.vy += (pos.y - t.y) * e;
+      for (let i = 0; i < this.nodes.length; i++) {
+        t = this.nodes[i];
+        if (i > 0) {
+          const n = this.nodes[i - 1];
+          t.vx += (n.x - t.x) * e;
+          t.vy += (n.y - t.y) * e;
+          t.vx += n.vx * E.dampening;
+          t.vy += n.vy * E.dampening;
         }
-      },
-      update: function () {
-        let e = this.spring, t = this.nodes[0];
-        t.vx += ((pos.x || window.innerWidth / 2) - t.x) * e;
-        t.vy += ((pos.y || window.innerHeight / 2) - t.y) * e;
-        for (let i = 0, a = this.nodes.length; i < a; i++) {
-          t = this.nodes[i];
-          if (i > 0) {
-            let n = this.nodes[i - 1];
-            t.vx += (n.x - t.x) * e;
-            t.vy += (n.y - t.y) * e;
-            t.vx += n.vx * E.dampening;
-            t.vy += n.vy * E.dampening;
-          }
-          t.vx *= this.friction;
-          t.vy *= this.friction;
-          t.x += t.vx;
-          t.y += t.vy;
-          e *= E.tension;
-        }
-      },
-      draw: function () {
-        let n = this.nodes[0].x, i = this.nodes[0].y;
-        ctx.beginPath();
-        ctx.moveTo(n, i);
-        for (let a = 1, o = this.nodes.length - 2; a < o; a++) {
-          let e = this.nodes[a], t = this.nodes[a + 1];
-          n = 0.5 * (e.x + t.x);
-          i = 0.5 * (e.y + t.y);
-          ctx.quadraticCurveTo(e.x, e.y, n, i);
-        }
-        let e = this.nodes[this.nodes.length - 2], t = this.nodes[this.nodes.length - 1];
-        ctx.quadraticCurveTo(e.x, e.y, t.x, t.y);
-        ctx.stroke();
-        ctx.closePath();
-      },
+        t.vx *= this.friction;
+        t.vy *= this.friction;
+        t.x += t.vx;
+        t.y += t.vy;
+        e *= E.tension;
+      }
+    };
+    TrailLine.prototype.draw = function () {
+      let n = this.nodes[0].x, i = this.nodes[0].y;
+      ctx.beginPath();
+      ctx.moveTo(n, i);
+      for (let a = 1, o = this.nodes.length - 2; a < o; a++) {
+        const e = this.nodes[a], t = this.nodes[a + 1];
+        n = 0.5 * (e.x + t.x);
+        i = 0.5 * (e.y + t.y);
+        ctx.quadraticCurveTo(e.x, e.y, n, i);
+      }
+      const e = this.nodes[this.nodes.length - 2], t = this.nodes[this.nodes.length - 1];
+      ctx.quadraticCurveTo(e.x, e.y, t.x, t.y);
+      ctx.stroke();
+      ctx.closePath();
     };
 
-    function onMousemove(evt: any) {
-      function o() {
-        lines = [];
-        for (let e = 0; e < E.trails; e++)
-          lines.push(new (Line as any)({ spring: 0.4 + (e / E.trails) * 0.025 }));
+    // ── Burst particles ──
+    interface Particle { x: number; y: number; vx: number; vy: number; life: number; }
+    let particles: Particle[] = [];
+
+    function spawnBurst(x: number, y: number) {
+      for (let i = 0; i < 8; i++) {
+        const angle = (i / 8) * Math.PI * 2 + Math.random() * 0.4;
+        const speed = 2.5 + Math.random() * 3;
+        particles.push({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, life: 1 });
       }
-      function c(e: any) {
-        if (e.touches) {
-          pos.x = e.touches[0].pageX;
-          pos.y = e.touches[0].pageY;
-        } else {
-          pos.x = e.clientX;
-          pos.y = e.clientY;
-        }
-        e.preventDefault();
-      }
-      function l(e: any) {
-        if (e.touches.length === 1) {
-          pos.x = e.touches[0].pageX;
-          pos.y = e.touches[0].pageY;
-        }
-      }
-      document.removeEventListener('mousemove', onMousemove);
-      document.removeEventListener('touchstart', onMousemove);
-      document.addEventListener('mousemove', c);
-      document.addEventListener('touchmove', c);
-      document.addEventListener('touchstart', l);
-      c(evt);
-      o();
-      render();
     }
 
+    // ── Event handlers ──
+    function onMove(e: MouseEvent | TouchEvent) {
+      if ((e as TouchEvent).touches) {
+        pos.x = mouseX = (e as TouchEvent).touches[0].clientX;
+        pos.y = mouseY = (e as TouchEvent).touches[0].clientY;
+      } else {
+        pos.x = mouseX = (e as MouseEvent).clientX;
+        pos.y = mouseY = (e as MouseEvent).clientY;
+      }
+      // Restart the loop if it was paused by a smooth scroll
+      if (performance.now() - lastRafTime > 100) restartIfNeeded();
+    }
+    function onMousedown(e: MouseEvent) { clicking = true; spawnBurst(e.clientX, e.clientY); }
+    function onMouseup() { clicking = false; }
+
+    const onEnterInteractive = () => { hovered = true; };
+    const onLeaveInteractive = () => { hovered = false; };
+    function bindInteractiveElements() {
+      document.querySelectorAll('a, button, [role="button"]').forEach(el => {
+        el.addEventListener('mouseenter', onEnterInteractive);
+        el.addEventListener('mouseleave', onLeaveInteractive);
+      });
+    }
+
+    // ── Main render loop ──
+    let running = true;
+    let rafId = 0;
+    let lastRafTime = 0;
     function render() {
-      if (ctx.running) {
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        ctx.globalCompositeOperation = 'lighter';
-        // Use cyan/blue gradient matching the website's accent colors (#0ea5e9 to #7dd3fc)
-        const hue = 199; // Cyan blue color
-        const saturation = 89;
-        const lightness = 48 + Math.sin(f.update() * 0.01) * 15; // Subtle brightness variation
-        ctx.strokeStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, 0.25)`;
-        ctx.lineWidth = 1;
-        for (let t = 0; t < E.trails; t++) {
-          let e = lines[t];
-          e.update();
-          e.draw();
-        }
-        ctx.frame++;
-        window.requestAnimationFrame(render);
+      if (!running) return;
+      lastRafTime = performance.now();
+
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      ctx.globalCompositeOperation = 'lighter';
+
+      // Trail
+      ctx.strokeStyle = 'hsla(199, 89%, 48%, 0.2)';
+      ctx.lineWidth = 1;
+      for (const line of lines) { line.update(); line.draw(); }
+
+      // Burst particles
+      particles = particles.filter(p => p.life > 0);
+      for (const p of particles) {
+        p.x += p.vx; p.y += p.vy;
+        p.vx *= 0.88; p.vy *= 0.88;
+        p.life -= 0.045;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 3 * p.life, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(199, 90%, 70%, ${p.life})`;
+        ctx.fill();
+      }
+
+      // Dot — snaps instantly
+      dotEl.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
+
+      // Ring — lerp follow + scale on hover/click
+      ringX += (mouseX - ringX) * 0.13;
+      ringY += (mouseY - ringY) * 0.13;
+      const ringSize = hovered ? 52 : clicking ? 20 : 34;
+      ringEl.style.transform = `translate(${ringX - ringSize / 2}px, ${ringY - ringSize / 2}px)`;
+      ringEl.style.width = ringEl.style.height = `${ringSize}px`;
+      ringEl.style.opacity = hovered ? '1' : '0.65';
+
+      rafId = requestAnimationFrame(render);
+    }
+
+    function restartIfNeeded() {
+      if (running) {
+        cancelAnimationFrame(rafId);
+        render();
       }
     }
 
@@ -148,50 +175,56 @@
       ctx.canvas.height = window.innerHeight;
     }
 
-    const renderCanvas = function () {
-      const canvas = document.getElementById('cursor-canvas') as HTMLCanvasElement;
-      if (!canvas) return;
-      
-      ctx = canvas.getContext('2d');
-      ctx.running = true;
-      ctx.frame = 1;
-      f = new (n as any)({
-        phase: Math.random() * 2 * Math.PI,
-        amplitude: 85,
-        frequency: 0.0015,
-        offset: 285,
-      });
-      document.addEventListener('mousemove', onMousemove);
-      document.addEventListener('touchstart', onMousemove);
-      document.body.addEventListener('orientationchange', resizeCanvas);
-      window.addEventListener('resize', resizeCanvas);
-      window.addEventListener('focus', () => {
-        if (!ctx.running) {
-          ctx.running = true;
-          render();
-        }
-      });
-      window.addEventListener('blur', () => {
-        ctx.running = true;
-      });
-      resizeCanvas();
-    };
+    // ── Init ──
+    const canvas = document.getElementById('cursor-canvas') as HTMLCanvasElement;
+    if (!canvas) return;
+    ctx = canvas.getContext('2d');
+    f = new (Oscillator as any)({ phase: Math.random() * 2 * Math.PI, amplitude: 85, frequency: 0.0015, offset: 285 });
+    resizeCanvas();
 
-    renderCanvas();
+    lines = [];
+    for (let i = 0; i < E.trails; i++)
+      lines.push(new (TrailLine as any)({ spring: 0.4 + (i / E.trails) * 0.025 }));
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('touchmove', onMove as any, { passive: true });
+    document.addEventListener('touchstart', onMove as any, { passive: true });
+    document.addEventListener('mousedown', onMousedown);
+    document.addEventListener('mouseup', onMouseup);
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('focus', restartIfNeeded);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) restartIfNeeded(); });
+    // Bind after a tick so all DOM elements exist
+    setTimeout(bindInteractiveElements, 300);
+
+    render();
 
     return () => {
-      if (ctx) {
-        ctx.running = false;
-      }
-      document.removeEventListener('mousemove', onMousemove);
-      document.removeEventListener('touchstart', onMousemove);
-      document.body.removeEventListener('orientationchange', resizeCanvas);
+      running = false;
+      cancelAnimationFrame(rafId);
+      document.body.style.cursor = '';
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mousedown', onMousedown);
+      document.removeEventListener('mouseup', onMouseup);
       window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('focus', restartIfNeeded);
     };
   });
 </script>
 
-<canvas 
-  id="cursor-canvas" 
-  style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;"
+<canvas
+  id="cursor-canvas"
+  style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9998;"
 ></canvas>
+
+<!-- Dot: snaps instantly to cursor -->
+<div
+  id="cursor-dot"
+  style="position:fixed;top:0;left:0;width:8px;height:8px;background:#0ea5e9;border-radius:50%;pointer-events:none;z-index:9999;will-change:transform;"
+></div>
+
+<!-- Ring: lags behind, scales on hover/click -->
+<div
+  id="cursor-ring"
+  style="position:fixed;top:0;left:0;width:34px;height:34px;border:1.5px solid rgba(14,165,233,0.65);border-radius:50%;pointer-events:none;z-index:9999;will-change:transform;transition:width 0.18s ease,height 0.18s ease,opacity 0.18s ease;"
+></div>

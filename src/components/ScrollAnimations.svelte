@@ -105,6 +105,25 @@
       { y: 0, opacity: 1, duration: 0.8, ease: 'expo.out', delay: 0.8 }
     );
 
+    // ── Card tilt on hover ──
+    const tiltCards = document.querySelectorAll<HTMLElement>('.animate-card, .animate-project');
+    tiltCards.forEach((card) => {
+      card.style.transformStyle = 'preserve-3d';
+      card.addEventListener('mousemove', (e: MouseEvent) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const rotateX = ((y / rect.height) - 0.5) * -12;
+        const rotateY = ((x / rect.width) - 0.5) * 12;
+        card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        card.style.transition = 'transform 0.08s ease, box-shadow 0.08s ease';
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)';
+        card.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
+      });
+    });
+
     return () => {
       observer.disconnect();
     };
