@@ -76,21 +76,25 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
         <div class="h-96">
           <div class="h-full bg-gradient-to-br from-accent-400/10 to-accent-600/10 rounded-2xl border border-accent-400/20 p-8 flex flex-col justify-between">
             <div id="about-stats" class="grid grid-cols-2 gap-4">
-              <div class="text-center p-4 rounded-xl bg-black/40 border border-accent-400/10">
-                <div class="text-4xl font-bold text-accent-400" data-count="8" data-suffix="">0</div>
-                <div class="text-sm text-gray-400 mt-1">Languages</div>
-              </div>
-              <div class="text-center p-4 rounded-xl bg-black/40 border border-accent-400/10">
-                <div class="text-4xl font-bold text-accent-400" data-count="10" data-suffix="+">0</div>
-                <div class="text-sm text-gray-400 mt-1">Frameworks</div>
-              </div>
-              <div class="text-center p-4 rounded-xl bg-black/40 border border-accent-400/10">
+              <div class="text-center p-4 rounded-xl bg-black/40 border border-accent-400/10" title="GitHub commits & PRs — fetched live">
                 <div class="text-4xl font-bold text-accent-400" data-count="0" data-suffix="" data-stat="contributions">—</div>
                 <div class="text-sm text-gray-400 mt-1">GitHub Contributions</div>
+                <div class="text-xs text-gray-600 mt-0.5">last 12 months · live</div>
               </div>
-              <div class="text-center p-4 rounded-xl bg-black/40 border border-accent-400/10">
-                <div class="text-4xl font-bold text-accent-400" data-count="20" data-suffix="+">0</div>
-                <div class="text-sm text-gray-400 mt-1">Technologies Used</div>
+              <div class="text-center p-4 rounded-xl bg-black/40 border border-accent-400/10" title="Yes, all at once. No, I can't close them.">
+                <div class="text-4xl font-bold text-accent-400" data-count="47" data-suffix="+">0</div>
+                <div class="text-sm text-gray-400 mt-1">Tabs Open</div>
+                <div class="text-xs text-gray-600 mt-0.5">send help</div>
+              </div>
+              <div class="text-center p-4 rounded-xl bg-black/40 border border-accent-400/10" title="Monster Energy. Green only. Non-negotiable.">
+                <div class="text-4xl font-bold text-accent-400" data-count="89" data-suffix="">0</div>
+                <div class="text-sm text-gray-400 mt-1">Monsters Consumed</div>
+                <div class="text-xs text-gray-600 mt-0.5">and counting</div>
+              </div>
+              <div class="text-center p-4 rounded-xl bg-black/40 border border-accent-400/10" title="It's called a backlog. Very professional.">
+                <div class="text-4xl font-bold text-accent-400" data-count="12" data-suffix="">0</div>
+                <div class="text-sm text-gray-400 mt-1">Unfinished Projects</div>
+                <div class="text-xs text-gray-600 mt-0.5">it's called a backlog</div>
               </div>
             </div>
             <div class="space-y-3">
@@ -112,10 +116,75 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
   <!-- Skills Section -->
   <section id="skills" class="min-h-screen flex items-center py-20 bg-black">
     <div class="max-w-7xl mx-auto px-6 w-full">
-      <h2 class="animate-heading text-5xl font-bold text-center mb-16">
+      <h2 class="animate-heading text-5xl font-bold text-center mb-12">
         Technical <span class="text-accent-400">Skills</span>
       </h2>
-      
+
+      <!-- Skill Progress Bars -->
+      <div id="skill-bars" class="mb-16 max-w-4xl mx-auto space-y-4">
+
+        <div class="flex items-center gap-4">
+          <div class="w-52 flex-shrink-0 flex items-center gap-2">
+            <span class="text-xs font-mono text-accent-400/40 select-none tabular-nums">01</span>
+            <span class="text-sm font-medium text-gray-200 tracking-wide">Frontend Mastery</span>
+          </div>
+          <div class="relative flex-1 h-[18px] bg-gray-900 border border-gray-800/60 overflow-hidden">
+            <div class="absolute inset-y-0 left-0 bg-accent-400/90" data-bar="88" style="width:0"></div>
+            <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:repeating-linear-gradient(90deg,transparent 0,transparent calc(5% - 1.5px),rgba(0,0,0,0.4) calc(5% - 1.5px),rgba(0,0,0,0.4) 5%)"></div>
+          </div>
+          <span class="font-mono text-xs text-accent-400 w-9 text-right flex-shrink-0 tabular-nums">88%</span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="w-52 flex-shrink-0 flex items-center gap-2">
+            <span class="text-xs font-mono text-accent-400/40 select-none tabular-nums">02</span>
+            <span class="text-sm font-medium text-gray-200 tracking-wide">Backend Mastery</span>
+          </div>
+          <div class="relative flex-1 h-[18px] bg-gray-900 border border-gray-800/60 overflow-hidden">
+            <div class="absolute inset-y-0 left-0 bg-accent-400/90" data-bar="75" style="width:0"></div>
+            <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:repeating-linear-gradient(90deg,transparent 0,transparent calc(5% - 1.5px),rgba(0,0,0,0.4) calc(5% - 1.5px),rgba(0,0,0,0.4) 5%)"></div>
+          </div>
+          <span class="font-mono text-xs text-accent-400 w-9 text-right flex-shrink-0 tabular-nums">75%</span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="w-52 flex-shrink-0 flex items-center gap-2">
+            <span class="text-xs font-mono text-accent-400/40 select-none tabular-nums">03</span>
+            <span class="text-sm font-medium text-gray-200 tracking-wide">UI/UX OCD</span>
+          </div>
+          <div class="relative flex-1 h-[18px] bg-gray-900 border border-gray-800/60 overflow-hidden">
+            <div class="absolute inset-y-0 left-0 bg-accent-400/90" data-bar="95" style="width:0"></div>
+            <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:repeating-linear-gradient(90deg,transparent 0,transparent calc(5% - 1.5px),rgba(0,0,0,0.4) calc(5% - 1.5px),rgba(0,0,0,0.4) 5%)"></div>
+          </div>
+          <span class="font-mono text-xs text-accent-400 w-9 text-right flex-shrink-0 tabular-nums">95%</span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="w-52 flex-shrink-0 flex items-center gap-2">
+            <span class="text-xs font-mono text-accent-400/40 select-none tabular-nums">04</span>
+            <span class="text-sm font-medium text-gray-200 tracking-wide">Sleep Schedule</span>
+          </div>
+          <div class="relative flex-1 h-[18px] bg-gray-900 border border-gray-800/60 overflow-hidden">
+            <div class="absolute inset-y-0 left-0 bg-accent-400/90" data-bar="18" style="width:0"></div>
+            <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:repeating-linear-gradient(90deg,transparent 0,transparent calc(5% - 1.5px),rgba(0,0,0,0.4) calc(5% - 1.5px),rgba(0,0,0,0.4) 5%)"></div>
+          </div>
+          <span class="font-mono text-xs text-accent-400 w-9 text-right flex-shrink-0 tabular-nums">18%</span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="w-52 flex-shrink-0 flex items-center gap-2">
+            <span class="text-xs font-mono text-accent-400/40 select-none tabular-nums">05</span>
+            <span class="text-sm font-medium text-gray-200 tracking-wide">Caffeine Consumption</span>
+          </div>
+          <div class="relative flex-1 h-[18px] bg-gray-900 border border-gray-800/60 overflow-hidden">
+            <div class="absolute inset-y-0 left-0 bg-accent-400/90" data-bar="92" style="width:0"></div>
+            <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background:repeating-linear-gradient(90deg,transparent 0,transparent calc(5% - 1.5px),rgba(0,0,0,0.4) calc(5% - 1.5px),rgba(0,0,0,0.4) 5%)"></div>
+          </div>
+          <span class="font-mono text-xs text-accent-400 w-9 text-right flex-shrink-0 tabular-nums">92%</span>
+        </div>
+
+      </div>
+
       <div class="animate-cards grid md:grid-cols-2 lg:grid-cols-4 gap-8">
         <!-- Programming Languages -->
         <div class="animate-card group p-6 rounded-2xl bg-gray-900/50 border-2 border-gray-800 hover:border-accent-400 transition-all hover:shadow-xl hover:shadow-accent-400/10 backdrop-blur-sm">
@@ -389,6 +458,31 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
     }, { threshold: 0.3 });
 
     observer.observe(statsGrid);
+  }
+</script>
+
+<script>
+  // ── Skill progress bars ──
+  const barsSection = document.getElementById('skill-bars');
+  if (barsSection) {
+    const fills = barsSection.querySelectorAll<HTMLElement>('[data-bar]');
+    let animated = false;
+    const barObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !animated) {
+          animated = true;
+          fills.forEach((fill, i) => {
+            const pct = fill.dataset.bar + '%';
+            setTimeout(() => {
+              fill.style.transition = 'width 1.1s cubic-bezier(0.25, 1, 0.5, 1)';
+              fill.style.width = pct;
+            }, i * 120);
+          });
+          barObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    barObserver.observe(barsSection);
   }
 </script>
 
