@@ -86,20 +86,6 @@
     opacity: var(--anchor-opacity, 0);
   }
 
-  .panel {
-    position: absolute;
-    left: var(--anchor-x);
-    top: var(--anchor-y);
-    transform: translate3d(-50%, calc(-50% + var(--lift, 0px)), 0)
-      scale(calc(var(--anchor-scale, 1) * var(--pop, 1)));
-    width: min(31rem, calc(100vw - 2.4rem));
-    padding: clamp(1rem, 2.2vw, 1.9rem);
-    border-radius: 1rem;
-    border: 1px solid rgba(117, 162, 255, 0.34);
-    background: linear-gradient(145deg, rgba(5, 10, 29, 0.82), rgba(4, 9, 27, 0.6));
-    backdrop-filter: blur(10px);
-    box-shadow: 0 20px 52px rgba(0, 0, 0, 0.38);
-  }
 
   .edge-copy {
     position: absolute;
@@ -120,28 +106,6 @@
     right: clamp(1rem, 3vw, 2rem);
   }
 
-  .eyebrow {
-    font-family: 'Space Grotesk', sans-serif;
-    color: rgba(176, 196, 255, 0.9);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    font-size: 0.72rem;
-    margin-bottom: 0.45rem;
-  }
-
-  h2 {
-    font-family: 'Space Grotesk', sans-serif;
-    margin: 0;
-    font-size: clamp(1.3rem, 4vw, 2.1rem);
-    line-height: 1.08;
-  }
-
-  .copy {
-    margin-top: 0.6rem;
-    color: rgba(215, 226, 255, 0.84);
-    font-size: clamp(0.9rem, 1.9vw, 1.06rem);
-    max-width: 50ch;
-  }
 
   @media (max-width: 760px) {
     .edge-copy {
