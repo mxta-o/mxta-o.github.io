@@ -5,33 +5,34 @@
   import { createGalaxy, type GalaxyController } from './scene/galaxy';
   import { createPortfolioCamera, updateCameraFromProgress } from './scene/camera';
   import { createRenderer, resizeRenderer } from './scene/renderer';
+  import { create as createAboutIcon } from './scene/icons/aboutIcon';
+  import { create as createExperienceIcon } from './scene/icons/experienceIcon';
+  import { create as createProjectsIcon } from './scene/icons/projectsIcon';
+  import { create as createVisionIcon } from './scene/icons/visionIcon';
+  import { create as createContactIcon } from './scene/icons/contactIcon';
+  import type { IconController } from './scene/icons/iconCore';
   import { ScrollController } from './systems/scrollController';
   import { CheckpointSystem, type CheckpointId } from './systems/checkpointSystem';
   import Intro from './ui/Intro.svelte';
   import About from './ui/About.svelte';
   import ExperienceSection from './ui/ExperienceSection.svelte';
   import Projects from './ui/Projects.svelte';
+  import Vision from './ui/Vision.svelte';
   import Contact from './ui/Contact.svelte';
   import { HIDDEN_ANCHOR, type UIAnchor } from './ui/types';
 
-  type ClusterState = {
-    points: THREE.Points;
-    scatter: Float32Array;
-    target: Float32Array;
-    current: Float32Array;
-    mix: number;
-    targetMix: number;
-  };
-
-  const SECTION_ORDER: CheckpointId[] = ['intro', 'about', 'experience', 'projects', 'contact'];
+  const SECTION_ORDER: CheckpointId[] = ['intro', 'about', 'experience', 'projects', 'vision', 'contact'];
 
   const CHECKPOINT_ANCHORS: Record<CheckpointId, THREE.Vector3> = {
     intro: new THREE.Vector3(-7.5, 8.2, 52),
-    about: new THREE.Vector3(15.2, 4.8, 34),
-    experience: new THREE.Vector3(5.8, 3, 14.5),
-    projects: new THREE.Vector3(-3.4, 2.5, 6.4),
+    about: new THREE.Vector3(10.8, 4.4, 24),
+    experience: new THREE.Vector3(2.2, 3.7, -3),
+    projects: new THREE.Vector3(10, 4.2, -34),
+    vision: new THREE.Vector3(35, 8.2, -29),
     contact: new THREE.Vector3(0, 17.2, 0.9)
   };
+
+  const GALAXY_CENTER = new THREE.Vector3(10.5, 0, 0);
 
   let canvas: HTMLCanvasElement | null = null;
   let activeSection: CheckpointId = 'intro';
@@ -44,14 +45,16 @@
     about: HIDDEN_ANCHOR,
     experience: HIDDEN_ANCHOR,
     projects: HIDDEN_ANCHOR,
+    vision: HIDDEN_ANCHOR,
     contact: HIDDEN_ANCHOR
   };
 
   let clusterReady: Record<CheckpointId, boolean> = {
-    intro: false,
+    intro: true,
     about: false,
     experience: false,
     projects: false,
+    vision: false,
     contact: false
   };
 
@@ -75,72 +78,6 @@
       scale,
       opacity,
       visible: true
-    };
-  };
-
-  const createCheckpointCluster = (
-    anchor: THREE.Vector3,
-    count: number,
-    innerColor: THREE.Color,
-    outerColor: THREE.Color
-  ): ClusterState => {
-    const geometry = new THREE.BufferGeometry();
-    const scatter = new Float32Array(count * 3);
-    const target = new Float32Array(count * 3);
-    const current = new Float32Array(count * 3);
-    const colors = new Float32Array(count * 3);
-    const color = new THREE.Color();
-
-    for (let i = 0; i < count; i += 1) {
-      const i3 = i * 3;
-      const scatterRadius = THREE.MathUtils.randFloat(12, 48);
-      const scatterAngle = Math.random() * Math.PI * 2;
-      const scatterHeight = THREE.MathUtils.randFloatSpread(9);
-
-      scatter[i3] = Math.cos(scatterAngle) * scatterRadius;
-      scatter[i3 + 1] = scatterHeight;
-      scatter[i3 + 2] = Math.sin(scatterAngle) * scatterRadius;
-
-      const localRadius = Math.pow(Math.random(), 0.58) * 4.4;
-      const localTheta = Math.random() * Math.PI * 2;
-      const localPhi = Math.acos(2 * Math.random() - 1);
-
-      target[i3] = anchor.x + localRadius * Math.sin(localPhi) * Math.cos(localTheta);
-      target[i3 + 1] = anchor.y + localRadius * Math.cos(localPhi) * 0.5;
-      target[i3 + 2] = anchor.z + localRadius * Math.sin(localPhi) * Math.sin(localTheta);
-
-      current[i3] = scatter[i3];
-      current[i3 + 1] = scatter[i3 + 1];
-      current[i3 + 2] = scatter[i3 + 2];
-
-      color.copy(innerColor).lerp(outerColor, Math.random());
-      colors[i3] = color.r;
-      colors[i3 + 1] = color.g;
-      colors[i3 + 2] = color.b;
-    }
-
-    geometry.setAttribute('position', new THREE.BufferAttribute(current, 3));
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-    const material = new THREE.PointsMaterial({
-      size: 0.048,
-      sizeAttenuation: true,
-      transparent: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-      vertexColors: true,
-      opacity: 0.98
-    });
-
-    const points = new THREE.Points(geometry, material);
-
-    return {
-      points,
-      scatter,
-      target,
-      current,
-      mix: 0,
-      targetMix: 0
     };
   };
 
@@ -195,19 +132,24 @@
     pointB.position.set(-16, -4, 90);
     scene.add(ambient, pointA, pointB);
 
-    const clusterColorIn = new THREE.Color('#ffcc90');
-    const clusterColorOut = new THREE.Color('#87b6ff');
+    const iconColors = {
+      inner: '#ffcc90',
+      outer: '#87b6ff'
+    };
 
-    const clusters: Record<CheckpointId, ClusterState> = {
-      intro: createCheckpointCluster(CHECKPOINT_ANCHORS.intro, 0, clusterColorIn, clusterColorOut),
-      about: createCheckpointCluster(CHECKPOINT_ANCHORS.about, 1500, clusterColorIn, clusterColorOut),
-      experience: createCheckpointCluster(CHECKPOINT_ANCHORS.experience, 1600, clusterColorIn, clusterColorOut),
-      projects: createCheckpointCluster(CHECKPOINT_ANCHORS.projects, 1500, clusterColorIn, clusterColorOut),
-      contact: createCheckpointCluster(CHECKPOINT_ANCHORS.contact, 0, clusterColorIn, clusterColorOut)
+    const icons: Record<CheckpointId, IconController | null> = {
+      intro: null,
+      about: createAboutIcon(CHECKPOINT_ANCHORS.about, iconColors),
+      experience: createExperienceIcon(CHECKPOINT_ANCHORS.experience, iconColors),
+      projects: createProjectsIcon(CHECKPOINT_ANCHORS.projects, iconColors),
+      vision: createVisionIcon(CHECKPOINT_ANCHORS.vision, iconColors),
+      contact: createContactIcon(CHECKPOINT_ANCHORS.contact, iconColors)
     };
 
     SECTION_ORDER.forEach((id) => {
-      scene.add(clusters[id].points);
+      if (icons[id]) {
+        scene.add(icons[id].points);
+      }
     });
 
     const scroll = new ScrollController();
@@ -309,21 +251,18 @@
 
       scroll.update(deltaSeconds);
 
-      pointerSmooth.x = THREE.MathUtils.lerp(pointerSmooth.x, pointerTarget.x, 0.07);
-      pointerSmooth.y = THREE.MathUtils.lerp(pointerSmooth.y, pointerTarget.y, 0.07);
-
-      updateCameraFromProgress(camera, scroll.progress, pointerSmooth);
-
-      if (introState.arrival > 0.001) {
-        camera.position.z += 34 * introState.arrival;
-        camera.position.y += 5.2 * introState.arrival;
-      }
-
-      camera.position.x += Math.sin(time * 0.00045) * 0.22;
-      camera.position.y += Math.cos(time * 0.00038) * 0.16;
-
       checkpoints.update(scroll.progress, (current, previous) => {
         activeSection = current;
+
+        const previousIcon = icons[previous];
+        if (previousIcon) {
+          previousIcon.animateOut();
+        }
+
+        const currentIcon = icons[current];
+        if (currentIcon) {
+          currentIcon.animateIn();
+        }
 
         window.dispatchEvent(
           new CustomEvent('experience:section-exit', {
@@ -346,39 +285,56 @@
 
       sectionProgress = checkpoints.getSectionProgress(scroll.progress, activeSection);
 
-      SECTION_ORDER.forEach((id) => {
-        clusters[id].targetMix = id === activeSection ? 1 : 0;
-      });
+      pointerSmooth.x = THREE.MathUtils.lerp(pointerSmooth.x, pointerTarget.x, 0.07);
+      pointerSmooth.y = THREE.MathUtils.lerp(pointerSmooth.y, pointerTarget.y, 0.07);
 
-      const nextSection = getNextSection(activeSection);
-      if (nextSection) {
-        // Keep the next section dormant until late in the current checkpoint.
-        const preWarm = THREE.MathUtils.clamp((sectionProgress - 0.86) / 0.14, 0, 1) * 0.18;
-        clusters[nextSection].targetMix = Math.max(clusters[nextSection].targetMix, preWarm);
+      updateCameraFromProgress(
+        camera,
+        scroll.progress,
+        pointerSmooth,
+        activeSection,
+        sectionProgress,
+        GALAXY_CENTER
+      );
+
+      if (introState.arrival > 0.001) {
+        camera.position.z += 34 * introState.arrival;
+        camera.position.y += 5.2 * introState.arrival;
       }
+
+      camera.position.x += Math.sin(time * 0.00045) * 0.22;
+      camera.position.y += Math.cos(time * 0.00038) * 0.16;
 
       const nextClusterReady = { ...clusterReady };
       SECTION_ORDER.forEach((id) => {
-        const state = clusters[id];
-        state.mix += (state.targetMix - state.mix) * (1 - Math.exp(-deltaSeconds * 6.2));
+        const icon = icons[id];
 
-        for (let i = 0; i < state.current.length; i += 1) {
-          state.current[i] = THREE.MathUtils.lerp(state.scatter[i], state.target[i], state.mix);
+        if (!icon) {
+          nextClusterReady[id] = id === 'intro';
+          return;
         }
 
-        const attr = state.points.geometry.attributes.position as THREE.BufferAttribute;
-        attr.needsUpdate = true;
-
-        const material = state.points.material as THREE.PointsMaterial;
-        material.opacity = 0.18 + state.mix * 0.9;
-        material.size = 0.035 + state.mix * 0.02;
-
-        nextClusterReady[id] = state.mix > 0.62;
+        const iconProgress = id === activeSection ? sectionProgress : 0;
+        icon.update(iconProgress);
+        nextClusterReady[id] = icon.isMaterialized();
       });
-      clusterReady = nextClusterReady;
 
-      const activeAnchor = CHECKPOINT_ANCHORS[activeSection];
-      const disableSectionPull = activeSection === 'intro' || activeSection === 'contact';
+      const introLikeVision = activeSection === 'vision';
+      const visionRenderBlend = introLikeVision
+        ? THREE.MathUtils.smoothstep(sectionProgress, 0.08, 0.34) *
+          (1 - THREE.MathUtils.smoothstep(sectionProgress, 0.82, 1))
+        : 0;
+
+      scene.fog.near = THREE.MathUtils.lerp(42, 55, visionRenderBlend);
+      scene.fog.far = THREE.MathUtils.lerp(200, 235, visionRenderBlend);
+      starsMaterial.size = THREE.MathUtils.lerp(0.2, 0.24, visionRenderBlend);
+      galaxyMaterial.size = THREE.MathUtils.lerp(0.042, 0.047, visionRenderBlend);
+
+      const activeAnchor =
+        activeSection === 'projects' || activeSection === 'vision' || activeSection === 'contact'
+          ? GALAXY_CENTER
+          : CHECKPOINT_ANCHORS[activeSection];
+      const disableSectionPull = activeSection === 'intro' || activeSection === 'vision' || activeSection === 'contact';
       const starPull = disableSectionPull ? 0 : 0.8 + sectionProgress * 2.6;
       for (let i = 0; i < starsCount; i += 1) {
         const i3 = i * 3;
@@ -428,6 +384,16 @@
           visible: true
         };
       });
+
+      const visibilityBoundReady = { ...nextClusterReady };
+      if (!projectedAnchors.about.visible) {
+        visibilityBoundReady.about = false;
+      }
+      if (!projectedAnchors.experience.visible) {
+        visibilityBoundReady.experience = false;
+      }
+
+      clusterReady = visibilityBoundReady;
       uiAnchors = projectedAnchors;
 
       galaxy.update(deltaSeconds);
@@ -450,10 +416,11 @@
       scroll.unmount();
 
       SECTION_ORDER.forEach((id) => {
-        const state = clusters[id];
-        scene.remove(state.points);
-        state.points.geometry.dispose();
-        (state.points.material as THREE.Material).dispose();
+        const icon = icons[id];
+        if (icon) {
+          scene.remove(icon.points);
+          icon.dispose();
+        }
       });
 
       scene.remove(stars);
@@ -498,11 +465,17 @@
       anchor={uiAnchors.projects}
       materialized={clusterReady.projects}
     />
+    <Vision
+      active={activeSection === 'vision'}
+      progress={sectionProgress}
+      anchor={uiAnchors.vision}
+      materialized={clusterReady.vision}
+    />
     <Contact
       active={activeSection === 'contact'}
       progress={sectionProgress}
       anchor={uiAnchors.contact}
-      materialized={true}
+      materialized={clusterReady.contact}
     />
   </div>
 

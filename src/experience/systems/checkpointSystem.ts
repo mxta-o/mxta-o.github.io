@@ -1,4 +1,4 @@
-export type CheckpointId = 'intro' | 'about' | 'experience' | 'projects' | 'contact';
+export type CheckpointId = 'intro' | 'about' | 'experience' | 'projects' | 'vision' | 'contact';
 
 export type Checkpoint = {
   id: CheckpointId;
@@ -7,10 +7,11 @@ export type Checkpoint = {
 };
 
 const DEFAULT_CHECKPOINTS: Checkpoint[] = [
-  { id: 'intro', start: 0, end: 0.2 },
-  { id: 'about', start: 0.2, end: 0.4 },
-  { id: 'experience', start: 0.4, end: 0.64 },
-  { id: 'projects', start: 0.64, end: 0.84 },
+  { id: 'intro', start: 0, end: 0.16 },
+  { id: 'about', start: 0.16, end: 0.31 },
+  { id: 'experience', start: 0.31, end: 0.47 },
+  { id: 'projects', start: 0.47, end: 0.6 },
+  { id: 'vision', start: 0.6, end: 0.84 },
   { id: 'contact', start: 0.84, end: 1 }
 ];
 

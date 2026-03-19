@@ -11,7 +11,6 @@
   let root: HTMLElement | null = null;
   let previousActive = false;
   let previousMaterialized = false;
-
   const ENTRY_DELAY = 0.14;
 
   const animateIn = () => {
@@ -56,7 +55,7 @@
   $: if (root && active && materialized) {
     const easedProgress = gsap.parseEase('power1.out')(progress);
     gsap.to(root, {
-      '--lift': `${gsap.utils.interpolate(8, -3, easedProgress)}px`,
+      '--lift': `${gsap.utils.interpolate(9, -2, easedProgress)}px`,
       '--pop': gsap.utils.interpolate(0.96, 1.02, easedProgress),
       duration: 0.24,
       ease: 'power1.out',
@@ -67,51 +66,71 @@
 
 <section
   bind:this={root}
-  class="stage"
-  aria-hidden={!active}
+  class="vision-overlay"
   style:--anchor-x={`${anchor.x}px`}
   style:--anchor-y={`${anchor.y}px`}
   style:--anchor-opacity={anchor.opacity}
-  style:--anchor-scale={anchor.scale}
+  style:--anchor-scale={Math.max(anchor.scale, 0.92)}
   style:visibility={anchor.visible ? 'visible' : 'hidden'}
 >
-  <p class="edge-copy left">about: mock profile snapshot</p>
-  <p class="edge-copy right">about: mock personal story</p>
+  <p class="eyebrow">Checkpoint 05</p>
+  <h1>My Vision</h1>
+  <p class="subtitle">vision goals for what I want to build and why it matters</p>
 </section>
 
 <style>
-  .stage {
+  .vision-overlay {
     position: absolute;
-    inset: 0;
+    left: 0;
+    top: 0;
+    transform: translate3d(
+        calc(var(--anchor-x) - clamp(16rem, 30vw, 30rem)),
+        calc(var(--anchor-y) - clamp(8rem, 13vh, 11rem) + var(--lift, 0px)),
+        0
+      )
+      scale(calc(var(--anchor-scale, 1) * var(--pop, 1)));
     opacity: var(--anchor-opacity, 0);
+    width: min(54rem, calc(100vw - 3rem));
+    padding: clamp(0.4rem, 1.2vw, 0.8rem);
+    text-shadow: 0 4px 22px rgba(0, 0, 0, 0.58);
   }
 
-  .edge-copy {
-    position: absolute;
-    top: clamp(1.1rem, 2.6vw, 2rem);
-    margin: 0;
+  .eyebrow {
     font-family: 'Space Grotesk', sans-serif;
-    color: rgba(236, 242, 255, 0.92);
+    color: rgba(172, 198, 255, 0.72);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    margin-bottom: 0.6rem;
+  }
+
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: clamp(2.1rem, 7.1vw, 5.2rem);
+    letter-spacing: -0.02em;
+    line-height: 0.98;
+    margin: 0;
+    color: rgba(241, 246, 255, 0.98);
+  }
+
+  .subtitle {
+    margin-top: 0.72rem;
+    font-size: clamp(1rem, 2.35vw, 2rem);
     letter-spacing: -0.01em;
-    font-size: clamp(1rem, 2.4vw, 2.1rem);
-    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.44);
+    color: rgba(226, 236, 255, 0.86);
+    text-transform: lowercase;
   }
 
-  .edge-copy.left {
-    left: clamp(1rem, 3vw, 2rem);
-  }
-
-  .edge-copy.right {
-    right: clamp(1rem, 3vw, 2rem);
-  }
-
-  @media (max-width: 760px) {
-    .edge-copy {
-      font-size: clamp(0.9rem, 4.8vw, 1.4rem);
-    }
-
-    .edge-copy.right {
-      top: clamp(3.6rem, 9vw, 4.7rem);
+  @media (max-width: 700px) {
+    .vision-overlay {
+      transform: translate3d(
+          calc(var(--anchor-x) - clamp(9rem, 21vw, 14rem)),
+          calc(var(--anchor-y) - clamp(7rem, 11vh, 9rem) + var(--lift, 0px)),
+          0
+        )
+        scale(calc(var(--anchor-scale, 1) * var(--pop, 1)));
+      width: min(92vw, 34rem);
     }
   }
 </style>

@@ -66,7 +66,7 @@
 
 <section
   bind:this={root}
-  class="panel"
+  class="stage"
   aria-hidden={!active}
   style:--anchor-x={`${anchor.x}px`}
   style:--anchor-y={`${anchor.y}px`}
@@ -74,48 +74,43 @@
   style:--anchor-scale={anchor.scale}
   style:visibility={anchor.visible ? 'visible' : 'hidden'}
 >
-  <p class="eyebrow">Checkpoint 04</p>
-  <h2>Projects</h2>
-  <p class="copy">Product-focused builds spanning tooling, interactive UX, and cloud-backed web apps.</p>
+  <p class="edge-copy left">projects: mock flagship builds</p>
+  <p class="edge-copy right">projects: mock shipped outcomes</p>
 </section>
 
 <style>
-  .panel {
+  .stage {
     position: absolute;
-    left: 0;
-    top: 0;
-    transform: translate3d(calc(var(--anchor-x) - 50%), calc(var(--anchor-y) - 50% + var(--lift, 0px)), 0)
-      scale(calc(var(--anchor-scale, 1) * var(--pop, 1)));
+    inset: 0;
     opacity: var(--anchor-opacity, 0);
-    width: min(32rem, calc(100vw - 2.2rem));
-    padding: clamp(1rem, 2.2vw, 1.9rem);
-    border-radius: 1rem;
-    border: 1px solid rgba(110, 156, 255, 0.3);
-    background: linear-gradient(145deg, rgba(7, 11, 30, 0.8), rgba(5, 8, 24, 0.58));
-    backdrop-filter: blur(8px);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.33);
   }
 
-  .eyebrow {
-    font-family: 'Space Grotesk', sans-serif;
-    color: rgba(176, 196, 255, 0.9);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    font-size: 0.72rem;
-    margin-bottom: 0.45rem;
-  }
-
-  h2 {
-    font-family: 'Space Grotesk', sans-serif;
+  .edge-copy {
+    position: absolute;
+    top: clamp(1.1rem, 2.6vw, 2rem);
     margin: 0;
-    font-size: clamp(1.3rem, 4vw, 2.1rem);
-    line-height: 1.08;
+    font-family: 'Space Grotesk', sans-serif;
+    color: rgba(236, 242, 255, 0.92);
+    letter-spacing: -0.01em;
+    font-size: clamp(1rem, 2.4vw, 2.1rem);
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.44);
   }
 
-  .copy {
-    margin-top: 0.6rem;
-    color: rgba(215, 226, 255, 0.84);
-    font-size: clamp(0.9rem, 1.9vw, 1.06rem);
-    max-width: 54ch;
+  .edge-copy.left {
+    left: clamp(1rem, 3vw, 2rem);
+  }
+
+  .edge-copy.right {
+    right: clamp(1rem, 3vw, 2rem);
+  }
+
+  @media (max-width: 760px) {
+    .edge-copy {
+      font-size: clamp(0.9rem, 4.8vw, 1.4rem);
+    }
+
+    .edge-copy.right {
+      top: clamp(3.6rem, 9vw, 4.7rem);
+    }
   }
 </style>
