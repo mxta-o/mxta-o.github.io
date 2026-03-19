@@ -77,11 +77,6 @@
   <p class="edge-copy left">more about myself</p>
   <p class="edge-copy right">contact info</p>
 
-  <div class="panel">
-    <p class="eyebrow">Checkpoint 05</p>
-    <h2>Contact</h2>
-    <p class="copy">Reach out for collaboration, product work, or internship opportunities.</p>
-  </div>
 </section>
 
 <style>
