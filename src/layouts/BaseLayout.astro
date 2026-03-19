@@ -1,7 +1,4 @@
 ---
-import CursorEffect from '../components/CursorEffect.svelte';
-import ScrollAnimations from '../components/ScrollAnimations.svelte';
-
 interface Props {
   title: string;
   description?: string;
@@ -21,8 +18,6 @@ const { title, description = "Software Engineering Student | Full-Stack Develope
     <title>{title}</title>
   </head>
   <body class="bg-black text-white antialiased">
-    <CursorEffect client:load />
-    <ScrollAnimations client:load />
     <slot />
   </body>
 </html>
@@ -73,11 +68,4 @@ const { title, description = "Software Engineering Student | Full-Stack Develope
     background: #38bdf8;
   }
 
-  /* Initial hidden state for animated elements */
-  .hero-title,
-  .hero-subtitle,
-  .hero-description,
-  .hero-buttons {
-    opacity: 0;
-  }
 </style>
