@@ -570,7 +570,7 @@
     position: absolute;
     min-height: 9.5rem;
     padding: clamp(0.9rem, 1.8vw, 1.2rem);
-    background: rgba(2, 6, 18, 0.4);
+    background: rgba(2, 6, 18, 0.1);
     backdrop-filter: blur(2px);
     border: 2px solid rgba(235, 244, 255, 0.92);
     box-shadow: 0 0 0 1px rgba(120, 166, 255, 0.2), 0 8px 30px rgba(0, 0, 0, 0.35);
