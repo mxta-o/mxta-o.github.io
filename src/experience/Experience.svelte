@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { fade } from 'svelte/transition';
   import gsap from 'gsap';
   import * as THREE from 'three';
   import { createGalaxy, type GalaxyController } from './scene/galaxy';
@@ -26,18 +27,43 @@
   const CHECKPOINT_ANCHORS: Record<CheckpointId, THREE.Vector3> = {
     intro: new THREE.Vector3(-7.5, 8.2, 52),
     about: new THREE.Vector3(10.8, 4.4, 24),
-    experience: new THREE.Vector3(2.2, 3.7, -3),
-    projects: new THREE.Vector3(10, 4.2, -34),
-    vision: new THREE.Vector3(35, 8.2, -29),
+    experience: new THREE.Vector3(3.5, 4.5, -15),
+    projects: new THREE.Vector3(8, 4.2, -34),
+    vision: new THREE.Vector3(30, 0, -55),
     contact: new THREE.Vector3(0, 17.2, 0.9)
   };
 
   const GALAXY_CENTER = new THREE.Vector3(10.5, 0, 0);
+  const NAV_ITEMS: Array<{
+    id: string;
+    label: string;
+    section: CheckpointId;
+    sectionProgress: number;
+  }> = [
+    { id: 'home', label: 'home', section: 'intro', sectionProgress: 0 },
+    { id: 'about', label: 'about', section: 'about', sectionProgress: 0.322 },
+    { id: 'work', label: 'work', section: 'experience', sectionProgress: 0.215 },
+    { id: 'projects', label: 'projects', section: 'projects', sectionProgress: 0.238 },
+    { id: 'vision', label: 'vision', section: 'vision', sectionProgress: 0.316 },
+    { id: 'contact', label: 'contact', section: 'contact', sectionProgress: 1 }
+  ];
+
+  const checkpointSystem = new CheckpointSystem();
 
   let canvas: HTMLCanvasElement | null = null;
   let activeSection: CheckpointId = 'intro';
   let sectionProgress = 0;
   let lookActive = false;
+  let showDebugHud = false;
+  let showSettings = false;
+  let galaxyInnerColor = '#ffb870';
+  let galaxyOuterColor = '#6ca2ff';
+  let innerInput = galaxyInnerColor;
+  let outerInput = galaxyOuterColor;
+  const CONTENT_ENTRY = 0.1;
+  const CONTENT_EXIT = 0.82;
+  const ABOUT_CONTENT_EXIT = 0.6;
+  const EXPERIENCE_CONTENT_EXIT = 0.560;
 
   let introMaskOpacity = 1;
   let uiAnchors: Record<CheckpointId, UIAnchor> = {
@@ -58,9 +84,75 @@
     contact: false
   };
 
+  let contentActive: Record<CheckpointId, boolean> = {
+    intro: true,
+    about: false,
+    experience: false,
+    projects: false,
+    vision: false,
+    contact: false
+  };
+
+  let scrollController: ScrollController | null = null;
+  let galaxyController: GalaxyController | null = null;
+  let iconControllers: Record<CheckpointId, IconController | null> = {
+    intro: null,
+    about: null,
+    experience: null,
+    projects: null,
+    vision: null,
+    contact: null
+  };
+
+  const isValidHex = (value: string) => /^#([0-9a-fA-F]{6})$/.test(value);
+
+  const navigateTo = (section: CheckpointId, sectionTarget = 0.5) => {
+    const target = checkpointSystem.getProgressAtSection(section, sectionTarget);
+    scrollController?.setProgress(target);
+  };
+
+  const applyParticleColors = () => {
+    galaxyController?.setColors(galaxyInnerColor, galaxyOuterColor);
+    SECTION_ORDER.forEach((id) => {
+      const icon = iconControllers[id];
+      if (!icon) return;
+      icon.setColors({
+        inner: galaxyInnerColor,
+        outer: galaxyOuterColor
+      });
+    });
+  };
+
+  const commitColor = (kind: 'inner' | 'outer', value: string) => {
+    if (!isValidHex(value)) return;
+    if (kind === 'inner') {
+      galaxyInnerColor = value;
+      innerInput = value;
+    } else {
+      galaxyOuterColor = value;
+      outerInput = value;
+    }
+    applyParticleColors();
+  };
+
+  const handleInnerColorInput = (event: Event) => {
+    const target = event.currentTarget as HTMLInputElement | null;
+    if (!target) return;
+    commitColor('inner', target.value);
+  };
+
+  const handleOuterColorInput = (event: Event) => {
+    const target = event.currentTarget as HTMLInputElement | null;
+    if (!target) return;
+    commitColor('outer', target.value);
+  };
+
   const projectToScreen = (camera: THREE.PerspectiveCamera, worldPoint: THREE.Vector3): UIAnchor => {
     const projected = worldPoint.clone().project(camera);
-    const inView = projected.z > -1.2 && projected.z < 1.1;
+    const inDepthRange = projected.z > -1.2 && projected.z < 1.1;
+    const inViewport =
+      projected.x > -1.02 && projected.x < 1.02 && projected.y > -1.02 && projected.y < 1.02;
+    const inView = inDepthRange && inViewport;
 
     if (!inView) {
       return { ...HIDDEN_ANCHOR };
@@ -93,9 +185,14 @@
     const camera = createPortfolioCamera(window.innerWidth / window.innerHeight);
     const renderer = createRenderer(canvas);
 
-    const galaxy: GalaxyController = createGalaxy({ particleCount: 50000 });
+    const galaxy: GalaxyController = createGalaxy({
+      particleCount: 62000,
+      innerColor: galaxyInnerColor,
+      outerColor: galaxyOuterColor
+    });
     scene.add(galaxy.points);
     galaxy.points.position.x = 10.5;
+    galaxyController = galaxy;
 
     const galaxyMaterial = galaxy.points.material as THREE.PointsMaterial;
     galaxyMaterial.opacity = 0;
@@ -145,6 +242,7 @@
       vision: createVisionIcon(CHECKPOINT_ANCHORS.vision, iconColors),
       contact: createContactIcon(CHECKPOINT_ANCHORS.contact, iconColors)
     };
+    iconControllers = icons;
 
     SECTION_ORDER.forEach((id) => {
       if (icons[id]) {
@@ -153,7 +251,8 @@
     });
 
     const scroll = new ScrollController();
-    const checkpoints = new CheckpointSystem();
+    scrollController = scroll;
+    const checkpoints = checkpointSystem;
     scroll.mount();
 
     let pointerTarget = { x: 0, y: 0 };
@@ -285,6 +384,19 @@
 
       sectionProgress = checkpoints.getSectionProgress(scroll.progress, activeSection);
 
+      const inContentWindow = (p: number) => p >= CONTENT_ENTRY && p <= CONTENT_EXIT;
+      const inAboutWindow = (p: number) => p >= CONTENT_ENTRY && p <= ABOUT_CONTENT_EXIT;
+      const inExperienceWindow = (p: number) => p >= CONTENT_ENTRY && p <= EXPERIENCE_CONTENT_EXIT;
+
+      contentActive = {
+        intro: activeSection === 'intro' && sectionProgress <= 0.96,
+        about: activeSection === 'about' && inAboutWindow(sectionProgress),
+        experience: activeSection === 'experience' && inExperienceWindow(sectionProgress),
+        projects: activeSection === 'projects' && inContentWindow(sectionProgress),
+        vision: activeSection === 'vision' && inContentWindow(sectionProgress),
+        contact: activeSection === 'contact' && sectionProgress >= 0.08
+      };
+
       pointerSmooth.x = THREE.MathUtils.lerp(pointerSmooth.x, pointerTarget.x, 0.07);
       pointerSmooth.y = THREE.MathUtils.lerp(pointerSmooth.y, pointerTarget.y, 0.07);
 
@@ -386,17 +498,32 @@
       });
 
       const visibilityBoundReady = { ...nextClusterReady };
-      if (!projectedAnchors.about.visible) {
+      const activeIndex = SECTION_ORDER.indexOf(activeSection);
+      const aboutIndex = SECTION_ORDER.indexOf('about');
+      const experienceIndex = SECTION_ORDER.indexOf('experience');
+      const projectsIndex = SECTION_ORDER.indexOf('projects');
+
+      if (!projectedAnchors.about.visible || activeIndex > aboutIndex) {
         visibilityBoundReady.about = false;
       }
-      if (!projectedAnchors.experience.visible) {
+      if (!projectedAnchors.experience.visible || activeIndex > experienceIndex) {
         visibilityBoundReady.experience = false;
+      }
+      if (
+        !projectedAnchors.projects.visible ||
+        activeIndex > projectsIndex ||
+        (activeSection === 'vision' && sectionProgress > 0.05)
+      ) {
+        visibilityBoundReady.projects = false;
+      }
+      if (activeSection !== 'vision' || sectionProgress >= 0.68) {
+        visibilityBoundReady.vision = false;
       }
 
       clusterReady = visibilityBoundReady;
       uiAnchors = projectedAnchors;
 
-      galaxy.update(deltaSeconds);
+      galaxy.update(deltaSeconds, scroll.progress);
       renderer.render(scene, camera);
 
       rafId = requestAnimationFrame(tick);
@@ -414,6 +541,7 @@
       window.removeEventListener('resize', onResize);
 
       scroll.unmount();
+      scrollController = null;
 
       SECTION_ORDER.forEach((id) => {
         const icon = icons[id];
@@ -429,6 +557,15 @@
 
       galaxy.dispose();
       scene.remove(galaxy.points);
+      galaxyController = null;
+      iconControllers = {
+        intro: null,
+        about: null,
+        experience: null,
+        projects: null,
+        vision: null,
+        contact: null
+      };
 
       renderer.dispose();
       document.documentElement.style.overflow = '';
@@ -440,6 +577,81 @@
 <div class="experience-root">
   <canvas bind:this={canvas} class="experience-canvas" class:look-active={lookActive} aria-hidden="true"></canvas>
 
+  <div class="control-layer">
+    <nav class="top-nav" aria-label="Scene Navigation">
+      {#each NAV_ITEMS as item}
+        <button
+          class="nav-link"
+          class:is-current={activeSection === item.section}
+          on:click={() => navigateTo(item.section, item.sectionProgress)}
+          type="button"
+        >
+          {item.label}
+        </button>
+      {/each}
+    </nav>
+
+    <button class="settings-trigger" type="button" on:click={() => (showSettings = !showSettings)}>
+      settings
+    </button>
+
+    {#if showSettings}
+      <section
+        class="settings-modal"
+        role="dialog"
+        aria-label="Experience Settings"
+        in:fade={{ duration: 180 }}
+        out:fade={{ duration: 180 }}
+      >
+        <div class="settings-head">
+          <h2>settings</h2>
+          <button type="button" class="close-btn" on:click={() => (showSettings = false)}>x</button>
+        </div>
+
+        <label class="check-row">
+          <input type="checkbox" bind:checked={showDebugHud} />
+          <span>show debug window</span>
+        </label>
+
+        <div class="color-group">
+          <p>particle inner color</p>
+          <div class="color-controls">
+            <input
+              type="color"
+              bind:value={galaxyInnerColor}
+              on:input={handleInnerColorInput}
+            />
+            <input
+              type="text"
+              bind:value={innerInput}
+              placeholder="#ffb870"
+              on:blur={() => commitColor('inner', innerInput)}
+              on:keydown={(e) => e.key === 'Enter' && commitColor('inner', innerInput)}
+            />
+          </div>
+        </div>
+
+        <div class="color-group">
+          <p>particle outer color</p>
+          <div class="color-controls">
+            <input
+              type="color"
+              bind:value={galaxyOuterColor}
+              on:input={handleOuterColorInput}
+            />
+            <input
+              type="text"
+              bind:value={outerInput}
+              placeholder="#6ca2ff"
+              on:blur={() => commitColor('outer', outerInput)}
+              on:keydown={(e) => e.key === 'Enter' && commitColor('outer', outerInput)}
+            />
+          </div>
+        </div>
+      </section>
+    {/if}
+  </div>
+
   <div class="ui-layer">
     <Intro
       active={activeSection === 'intro'}
@@ -448,35 +660,48 @@
       materialized={true}
     />
     <About
-      active={activeSection === 'about'}
+      active={contentActive.about}
       progress={sectionProgress}
       anchor={uiAnchors.about}
       materialized={clusterReady.about}
     />
     <ExperienceSection
-      active={activeSection === 'experience'}
+      active={contentActive.experience}
       progress={sectionProgress}
       anchor={uiAnchors.experience}
       materialized={clusterReady.experience}
     />
     <Projects
-      active={activeSection === 'projects'}
+      active={contentActive.projects}
       progress={sectionProgress}
       anchor={uiAnchors.projects}
       materialized={clusterReady.projects}
     />
     <Vision
-      active={activeSection === 'vision'}
+      active={contentActive.vision}
       progress={sectionProgress}
       anchor={uiAnchors.vision}
       materialized={clusterReady.vision}
     />
     <Contact
-      active={activeSection === 'contact'}
+      active={contentActive.contact}
       progress={sectionProgress}
       anchor={uiAnchors.contact}
       materialized={clusterReady.contact}
     />
+
+    {#if showDebugHud}
+      <aside class="debug-hud" aria-live="polite">
+        <p>activeSection: {activeSection}</p>
+        <p>sectionProgress: {sectionProgress.toFixed(3)}</p>
+        <p>content about/exp/proj/vision/contact: {contentActive.about ? '1' : '0'}/{contentActive.experience ? '1' : '0'}/{contentActive.projects ? '1' : '0'}/{contentActive.vision ? '1' : '0'}/{contentActive.contact ? '1' : '0'}</p>
+        <p>about: m={clusterReady.about ? '1' : '0'} v={uiAnchors.about.visible ? '1' : '0'} x={Math.round(uiAnchors.about.x)} y={Math.round(uiAnchors.about.y)}</p>
+        <p>exp: m={clusterReady.experience ? '1' : '0'} v={uiAnchors.experience.visible ? '1' : '0'} x={Math.round(uiAnchors.experience.x)} y={Math.round(uiAnchors.experience.y)}</p>
+        <p>proj: m={clusterReady.projects ? '1' : '0'} v={uiAnchors.projects.visible ? '1' : '0'} x={Math.round(uiAnchors.projects.x)} y={Math.round(uiAnchors.projects.y)}</p>
+        <p>vision: m={clusterReady.vision ? '1' : '0'} v={uiAnchors.vision.visible ? '1' : '0'} x={Math.round(uiAnchors.vision.x)} y={Math.round(uiAnchors.vision.y)}</p>
+        <p>contact: m={clusterReady.contact ? '1' : '0'} v={uiAnchors.contact.visible ? '1' : '0'} x={Math.round(uiAnchors.contact.x)} y={Math.round(uiAnchors.contact.y)}</p>
+      </aside>
+    {/if}
   </div>
 
   <div class="intro-mask" style={`opacity:${introMaskOpacity}`}></div>
@@ -507,7 +732,149 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    z-index: 3;
+    z-index: 30;
+  }
+
+  .control-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 80;
+  }
+
+  .top-nav {
+    position: absolute;
+    top: 1.05rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.85rem;
+    pointer-events: auto;
+  }
+
+  .nav-link {
+    border: 0;
+    background: transparent;
+    color: rgba(222, 231, 244, 0.68);
+    font: 400 1.05rem/1 'Space Grotesk', sans-serif;
+    letter-spacing: -0.01em;
+    text-transform: lowercase;
+    padding: 0;
+    border-bottom: 1px solid rgba(223, 236, 255, 0.14);
+    cursor: pointer;
+    transition: color 180ms ease, border-color 180ms ease;
+  }
+
+  .nav-link:hover,
+  .nav-link.is-current {
+    color: rgba(238, 244, 255, 0.9);
+    border-color: rgba(230, 240, 255, 0.55);
+  }
+
+  .settings-trigger {
+    position: absolute;
+    right: 1.05rem;
+    bottom: 0.82rem;
+    border: 0;
+    background: transparent;
+    color: rgba(224, 232, 246, 0.74);
+    font: 400 1.1rem/1 'Space Grotesk', sans-serif;
+    letter-spacing: -0.01em;
+    border-bottom: 1px solid rgba(223, 236, 255, 0.18);
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+  .settings-modal {
+    position: absolute;
+    right: 1rem;
+    bottom: 2.75rem;
+    width: min(92vw, 23rem);
+    padding: 0.8rem 0.85rem;
+    border: 1px solid rgba(209, 227, 255, 0.45);
+    background: rgba(2, 8, 24, 0.82);
+    backdrop-filter: blur(6px);
+    pointer-events: auto;
+  }
+
+  .settings-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.55rem;
+  }
+
+  .settings-head h2 {
+    margin: 0;
+    color: rgba(235, 243, 255, 0.9);
+    font: 500 1rem/1 'Space Grotesk', sans-serif;
+    text-transform: lowercase;
+  }
+
+  .close-btn {
+    border: 0;
+    background: transparent;
+    color: rgba(224, 235, 255, 0.8);
+    font: 500 1rem/1 'Space Grotesk', sans-serif;
+    cursor: pointer;
+  }
+
+  .check-row {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: rgba(220, 232, 251, 0.84);
+    font: 400 0.92rem/1.2 'Space Grotesk', sans-serif;
+    text-transform: lowercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .check-row input[type='checkbox'] {
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border: 1px solid rgba(222, 234, 255, 0.75);
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .check-row input[type='checkbox']:checked {
+    background: rgba(248, 252, 255, 0.95);
+  }
+
+  .color-group {
+    margin-bottom: 0.72rem;
+  }
+
+  .color-group p {
+    margin: 0 0 0.36rem;
+    color: rgba(216, 230, 252, 0.84);
+    font: 400 0.82rem/1.2 'Space Grotesk', sans-serif;
+    text-transform: lowercase;
+  }
+
+  .color-controls {
+    display: flex;
+    gap: 0.45rem;
+  }
+
+  .color-controls input[type='color'] {
+    width: 44px;
+    height: 28px;
+    border: 1px solid rgba(220, 233, 255, 0.55);
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .color-controls input[type='text'] {
+    flex: 1;
+    height: 28px;
+    border: 1px solid rgba(220, 233, 255, 0.35);
+    background: rgba(6, 12, 28, 0.8);
+    color: rgba(233, 242, 255, 0.9);
+    padding: 0 0.45rem;
+    font: 400 0.83rem/1 'Space Grotesk', sans-serif;
+    text-transform: lowercase;
   }
 
   .intro-mask {
@@ -516,5 +883,25 @@
     background: #000;
     pointer-events: none;
     z-index: 5;
+  }
+
+  .debug-hud {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 210;
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0.72);
+    border: 1px solid rgba(180, 210, 255, 0.52);
+    color: #d8e7ff;
+    padding: 0.5rem 0.6rem;
+    font: 11.5px/1.25 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+      'Courier New', monospace;
+    max-width: min(92vw, 52rem);
+    white-space: normal;
+  }
+
+  .debug-hud p {
+    margin: 0;
   }
 </style>

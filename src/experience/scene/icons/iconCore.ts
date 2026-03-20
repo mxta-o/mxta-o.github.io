@@ -5,6 +5,7 @@ export type IconController = {
   animateIn: () => void;
   animateOut: () => void;
   update: (progress: number) => void;
+  setColors: (colors: IconColorSet) => void;
   isMaterialized: () => boolean;
   dispose: () => void;
 };
@@ -49,6 +50,7 @@ export function createParticleIcon(config: ParticleIconConfig): IconController {
   const colorA = new THREE.Color(config.colors.inner);
   const colorB = new THREE.Color(config.colors.outer);
   const colorMix = new THREE.Color();
+  const colorLerp: Float32Array = new Float32Array(config.count);
 
   for (let i = 0; i < config.count; i += 1) {
     const i3 = i * 3;
@@ -72,7 +74,9 @@ export function createParticleIcon(config: ParticleIconConfig): IconController {
     current[i3 + 1] = scatter[i3 + 1];
     current[i3 + 2] = scatter[i3 + 2];
 
-    colorMix.copy(colorA).lerp(colorB, Math.random());
+    const t = Math.random();
+    colorLerp[i] = t;
+    colorMix.copy(colorA).lerp(colorB, t);
     colors[i3] = colorMix.r;
     colors[i3 + 1] = colorMix.g;
     colors[i3 + 2] = colorMix.b;
@@ -146,6 +150,21 @@ export function createParticleIcon(config: ParticleIconConfig): IconController {
       materialized = false;
     },
     update,
+    setColors: (nextColors: IconColorSet) => {
+      colorA.set(nextColors.inner);
+      colorB.set(nextColors.outer);
+      const colorAttr = geometry.getAttribute('color') as THREE.BufferAttribute;
+
+      for (let i = 0; i < config.count; i += 1) {
+        const i3 = i * 3;
+        colorMix.copy(colorA).lerp(colorB, colorLerp[i]);
+        colors[i3] = colorMix.r;
+        colors[i3 + 1] = colorMix.g;
+        colors[i3 + 2] = colorMix.b;
+      }
+
+      colorAttr.needsUpdate = true;
+    },
     isMaterialized: () => materialized,
     dispose: () => {
       geometry.dispose();

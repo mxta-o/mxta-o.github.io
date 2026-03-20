@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import gsap from 'gsap';
   import type { UIAnchor } from './types';
 
   export let active = false;
@@ -8,91 +6,48 @@
   export let anchor: UIAnchor;
   export let materialized = false;
 
-  let root: HTMLElement | null = null;
-  let previousActive = false;
-  let previousMaterialized = false;
-  const ENTRY_DELAY = 0.14;
+  // Keep prop contract stable with parent while position is now screen-fixed.
+  $: void anchor;
+  $: void materialized;
 
-  const animateIn = () => {
-    if (!root) return;
-    gsap.to(root, {
-      autoAlpha: 1,
-      '--lift': '0px',
-      '--pop': 1,
-      delay: ENTRY_DELAY,
-      duration: 0.68,
-      ease: 'power2.out',
-      pointerEvents: 'auto'
-    });
-  };
+  const VISION_EXIT_START = 0.9;
+  const VISION_EXIT_SPAN = 0.1;
 
-  const animateOut = () => {
-    if (!root) return;
-    gsap.to(root, {
-      autoAlpha: 0,
-      '--lift': '18px',
-      '--pop': 0.94,
-      duration: 0.5,
-      ease: 'power2.in',
-      pointerEvents: 'none'
-    });
-  };
-
-  onMount(() => {
-    gsap.set(root, { autoAlpha: 0, '--lift': '18px', '--pop': 0.94, pointerEvents: 'none' });
-    if (active && materialized) animateIn();
-    previousActive = active;
-    previousMaterialized = materialized;
-  });
-
-  $: if (root && (active !== previousActive || materialized !== previousMaterialized)) {
-    previousActive = active;
-    previousMaterialized = materialized;
-    if (active && materialized) animateIn();
-    else animateOut();
-  }
-
-  $: if (root && active && materialized) {
-    const easedProgress = gsap.parseEase('power1.out')(progress);
-    gsap.to(root, {
-      '--lift': `${gsap.utils.interpolate(9, -2, easedProgress)}px`,
-      '--pop': gsap.utils.interpolate(0.96, 1.02, easedProgress),
-      duration: 0.24,
-      ease: 'power1.out',
-      overwrite: 'auto'
-    });
-  }
+  $: sectionProgress = Math.min(1, Math.max(0, progress));
+  $: motionT = Math.min(1, Math.max(0, sectionProgress / VISION_EXIT_START));
+  $: lift = 9 + (-11 * motionT);
+  $: pop = 0.96 + 0.06 * motionT;
+  $: fadeLead = active
+    ? Math.min(1, Math.max(0, (sectionProgress - VISION_EXIT_START) / VISION_EXIT_SPAN))
+    : 1;
+  $: overlayOpacity = active ? 1 - fadeLead : 0;
+  $: overlayVisibility = active ? 'visible' : 'hidden';
+  $: overlayTransform = `translate3d(0, ${lift}px, 0) scale(${pop})`;
 </script>
 
 <section
-  bind:this={root}
   class="vision-overlay"
-  style:--anchor-x={`${anchor.x}px`}
-  style:--anchor-y={`${anchor.y}px`}
-  style:--anchor-opacity={anchor.opacity}
-  style:--anchor-scale={Math.max(anchor.scale, 0.92)}
-  style:visibility={anchor.visible ? 'visible' : 'hidden'}
+  aria-hidden={!active}
+  style:opacity={overlayOpacity}
+  style:visibility={overlayVisibility}
+  style:transform={overlayTransform}
 >
   <p class="eyebrow">Checkpoint 05</p>
   <h1>My Vision</h1>
-  <p class="subtitle">vision goals for what I want to build and why it matters</p>
+  <p class="subtitle">building full-stack and cloud-native products that are clean, scalable, and human</p>
 </section>
 
 <style>
   .vision-overlay {
     position: absolute;
-    left: 0;
-    top: 0;
-    transform: translate3d(
-        calc(var(--anchor-x) - clamp(16rem, 30vw, 30rem)),
-        calc(var(--anchor-y) - clamp(8rem, 13vh, 11rem) + var(--lift, 0px)),
-        0
-      )
-      scale(calc(var(--anchor-scale, 1) * var(--pop, 1)));
-    opacity: var(--anchor-opacity, 0);
+    left: clamp(1.2rem, 8vw, 4.6rem);
+    top: clamp(30vh, 20vh, 36vh);
+    opacity: 1;
     width: min(54rem, calc(100vw - 3rem));
     padding: clamp(0.4rem, 1.2vw, 0.8rem);
     text-shadow: 0 4px 22px rgba(0, 0, 0, 0.58);
+    pointer-events: none;
+    transition: opacity 220ms ease;
   }
 
   .eyebrow {
@@ -124,12 +79,8 @@
 
   @media (max-width: 700px) {
     .vision-overlay {
-      transform: translate3d(
-          calc(var(--anchor-x) - clamp(9rem, 21vw, 14rem)),
-          calc(var(--anchor-y) - clamp(7rem, 11vh, 9rem) + var(--lift, 0px)),
-          0
-        )
-        scale(calc(var(--anchor-scale, 1) * var(--pop, 1)));
+      left: clamp(1rem, 4vw, 1.4rem);
+      top: clamp(24vh, 32vh, 38vh);
       width: min(92vw, 34rem);
     }
   }

@@ -34,7 +34,7 @@ const EDGES: Array<[number, number]> = [
 ];
 
 export function create(anchor: THREE.Vector3, colors: IconColorSet = DEFAULT_COLORS): IconController {
-  const count = 1400;
+  const count = 1900;
 
   return createParticleIcon({
     anchor,

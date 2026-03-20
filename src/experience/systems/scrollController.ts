@@ -44,6 +44,18 @@ export class ScrollController {
     );
   }
 
+  setProgress(progress: number, snapCurrent = false) {
+    const clamped = THREE.MathUtils.clamp(progress, 0, 1);
+    this.targetProgress = clamped;
+    if (snapCurrent) {
+      this.currentProgress = clamped;
+    }
+  }
+
+  get target() {
+    return this.targetProgress;
+  }
+
   get progress() {
     return this.currentProgress;
   }

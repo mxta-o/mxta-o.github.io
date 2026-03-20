@@ -9,7 +9,7 @@ const DEFAULT_COLORS: IconColorSet = {
 export function create(anchor: THREE.Vector3, colors: IconColorSet = DEFAULT_COLORS): IconController {
   return createParticleIcon({
     anchor,
-    count: 1300,
+    count: 2500,
     colors,
     pointSize: 0.05,
     scatterRadius: [14, 44],

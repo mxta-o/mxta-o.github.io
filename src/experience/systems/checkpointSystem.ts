@@ -1,4 +1,10 @@
-export type CheckpointId = 'intro' | 'about' | 'experience' | 'projects' | 'vision' | 'contact';
+export type CheckpointId =
+  | 'intro'
+  | 'about'
+  | 'experience'
+  | 'projects'
+  | 'vision'
+  | 'contact';
 
 export type Checkpoint = {
   id: CheckpointId;
@@ -50,6 +56,17 @@ export class CheckpointSystem {
     const section = this.getCheckpointById(sectionId);
     const range = Math.max(section.end - section.start, 0.0001);
     return Math.min(1, Math.max(0, (progress - section.start) / range));
+  }
+
+  getSectionCenter(sectionId: CheckpointId) {
+    const section = this.getCheckpointById(sectionId);
+    return (section.start + section.end) / 2;
+  }
+
+  getProgressAtSection(sectionId: CheckpointId, sectionProgress: number) {
+    const section = this.getCheckpointById(sectionId);
+    const normalized = Math.min(1, Math.max(0, sectionProgress));
+    return section.start + (section.end - section.start) * normalized;
   }
 
   get current() {
