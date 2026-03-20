@@ -450,16 +450,18 @@
           {/each}
         </div>
       {:else}
-        <div class="copy-wrap">
-          {#each rightLines as line}
-            {#if line.indexOf(':') > -1}
-              {@const idx = line.indexOf(':')}
-              <p><strong>{line.slice(0, idx + 1)}</strong> {line.slice(idx + 1).trim()}</p>
-            {:else}
-              <p>{line}</p>
-            {/if}
-          {/each}
-        </div>
+        <slot name="right">
+          <div class="copy-wrap">
+            {#each rightLines as line}
+              {#if line.indexOf(':') > -1}
+                {@const idx = line.indexOf(':')}
+                <p><strong>{line.slice(0, idx + 1)}</strong> {line.slice(idx + 1).trim()}</p>
+              {:else}
+                <p>{line}</p>
+              {/if}
+            {/each}
+          </div>
+        </slot>
       {/if}
     </article>
   {/if}
@@ -522,6 +524,7 @@
     width: 100%;
     height: 100%;
     overflow: visible;
+    pointer-events: none;
   }
 
   .anchor-core {
@@ -602,6 +605,7 @@
     inset: 0;
     width: 100%;
     height: 100%;
+    pointer-events: none;
   }
 
   .frame rect {

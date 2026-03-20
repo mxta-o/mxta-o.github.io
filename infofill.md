@@ -424,13 +424,13 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
 <script>
   const statsGrid = document.getElementById('about-stats');
   if (statsGrid) {
-    const animateCount = (el: HTMLElement) => {
+    const animateCount = (el) => {
       const target = parseInt(el.dataset.count ?? '0');
       if (!target) return;
       const suffix = el.dataset.suffix || '';
       const duration = 1500;
       const start = performance.now();
-      const update = (now: number) => {
+      const update = (now) => {
         const progress = Math.min((now - start) / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 3);
         el.textContent = Math.round(eased * target) + suffix;
@@ -444,7 +444,7 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
 
     const maybeAnimate = () => {
       if (contributionsReady && sectionVisible) {
-        statsGrid.querySelectorAll<HTMLElement>('[data-count]').forEach(animateCount);
+        statsGrid.querySelectorAll('[data-count]').forEach(animateCount);
       }
     };
 
@@ -453,7 +453,7 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
       .then(r => r.json())
       .then(data => {
         const count = data?.total?.lastYear ?? 0;
-        const contribEl = statsGrid.querySelector('[data-stat="contributions"]') as HTMLElement | null;
+        const contribEl = statsGrid.querySelector('[data-stat="contributions"]');
         if (contribEl && count > 0) contribEl.dataset.count = count;
         contributionsReady = true;
         maybeAnimate();
@@ -482,7 +482,7 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
   // ── Skill progress bars ──
   const barsSection = document.getElementById('skill-bars');
   if (barsSection) {
-    const fills = barsSection.querySelectorAll<HTMLElement>('[data-bar]');
+    const fills = barsSection.querySelectorAll('[data-bar]');
     let animated = false;
     const barObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -600,11 +600,11 @@ import HeroCanvas from '../components/3D/HeroCanvas.svelte';
 
 <script>
   // ── Contact modal ──
-  const modal    = document.getElementById('contact-modal') as HTMLElement;
-  const card     = document.getElementById('contact-card') as HTMLElement;
+  const modal    = document.getElementById('contact-modal');
+  const card     = document.getElementById('contact-card');
   const backdrop = document.getElementById('contact-backdrop');
   const closeBtn = document.getElementById('contact-close');
-  const toast    = document.getElementById('copy-toast') as HTMLElement;
+  const toast    = document.getElementById('copy-toast');
 
   function openModal() {
     modal.style.visibility = 'visible';
