@@ -21,6 +21,7 @@
   import Vision from './ui/Vision.svelte';
   import Contact from './ui/Contact.svelte';
   import { HIDDEN_ANCHOR, type UIAnchor } from './ui/types';
+  import { AudioManager } from '../lib/audio';
 
   const SECTION_ORDER: CheckpointId[] = ['intro', 'about', 'experience', 'projects', 'vision', 'contact'];
 
@@ -56,6 +57,16 @@
   let lookActive = false;
   let showDebugHud = false;
   let showSettings = false;
+  const AUDIO_ASSETS = {
+    ambience: '/audio/ambience.mp3',
+    cardRender: '/audio/card-render.mp3'
+  };
+  let ambienceVolume = 0.42;
+  let sfxVolume = 0.72;
+  const AUDIO_STORAGE_KEYS = {
+    ambienceVolume: 'experience.audio.ambienceVolume',
+    sfxVolume: 'experience.audio.sfxVolume'
+  } as const;
   let galaxyInnerColor = '#ffb870';
   let galaxyOuterColor = '#6ca2ff';
   let innerInput = galaxyInnerColor;
@@ -85,6 +96,14 @@
   };
 
   let contentActive: Record<CheckpointId, boolean> = {
+    intro: true,
+    about: false,
+    experience: false,
+    projects: false,
+    vision: false,
+    contact: false
+  };
+  let previousContentActive: Record<CheckpointId, boolean> = {
     intro: true,
     about: false,
     experience: false,
@@ -147,6 +166,45 @@
     commitColor('outer', target.value);
   };
 
+  const clampVolume = (value: number) => THREE.MathUtils.clamp(value, 0, 1);
+
+  const parseStoredVolume = (value: string | null, fallback: number) => {
+    if (value === null) return fallback;
+    const parsed = Number(value);
+    if (Number.isNaN(parsed)) return fallback;
+    return clampVolume(parsed);
+  };
+
+  const persistAudioSettings = () => {
+    if (typeof localStorage === 'undefined') return;
+    localStorage.setItem(AUDIO_STORAGE_KEYS.ambienceVolume, ambienceVolume.toString());
+    localStorage.setItem(AUDIO_STORAGE_KEYS.sfxVolume, sfxVolume.toString());
+  };
+
+  const setSfxVolume = (value: number) => {
+    sfxVolume = clampVolume(value);
+    AudioManager.setSfxVolume(sfxVolume);
+    persistAudioSettings();
+  };
+
+  const setAmbienceVolume = (value: number) => {
+    ambienceVolume = clampVolume(value);
+    AudioManager.setAmbienceVolume(ambienceVolume);
+    persistAudioSettings();
+  };
+
+  const handleSfxVolumeInput = (event: Event) => {
+    const target = event.currentTarget as HTMLInputElement | null;
+    if (!target) return;
+    setSfxVolume(Number(target.value));
+  };
+
+  const handleAmbienceVolumeInput = (event: Event) => {
+    const target = event.currentTarget as HTMLInputElement | null;
+    if (!target) return;
+    setAmbienceVolume(Number(target.value));
+  };
+
   const projectToScreen = (camera: THREE.PerspectiveCamera, worldPoint: THREE.Vector3): UIAnchor => {
     const projected = worldPoint.clone().project(camera);
     const inDepthRange = projected.z > -1.2 && projected.z < 1.1;
@@ -178,6 +236,21 @@
 
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
+
+    if (typeof localStorage !== 'undefined') {
+      ambienceVolume = parseStoredVolume(
+        localStorage.getItem(AUDIO_STORAGE_KEYS.ambienceVolume),
+        ambienceVolume
+      );
+      sfxVolume = parseStoredVolume(localStorage.getItem(AUDIO_STORAGE_KEYS.sfxVolume), sfxVolume);
+    }
+
+    AudioManager.preload(AUDIO_ASSETS.ambience);
+    AudioManager.preload(AUDIO_ASSETS.cardRender);
+    AudioManager.setSfxVolume(sfxVolume);
+    AudioManager.setAmbience(AUDIO_ASSETS.ambience, { loop: true, volume: ambienceVolume });
+    AudioManager.enableOnUserGesture();
+    AudioManager.playAmbience();
 
     const scene = new THREE.Scene();
     scene.fog = new THREE.Fog('#01030b', 42, 200);
@@ -326,6 +399,8 @@
     const onPointerDown = (event: PointerEvent) => {
       if (event.button !== 0) return;
       lookActive = true;
+      // Retry ambience start on first interactions in case autoplay was blocked.
+      AudioManager.playAmbience();
     };
 
     const onPointerUp = () => {
@@ -397,6 +472,17 @@
         vision: activeSection === 'vision' && inContentWindow(sectionProgress),
         contact: activeSection === 'contact' && sectionProgress >= 0.08
       };
+
+      if (
+        (contentActive.about && !previousContentActive.about) ||
+        (contentActive.experience && !previousContentActive.experience) ||
+        (contentActive.projects && !previousContentActive.projects) ||
+        (contentActive.vision && !previousContentActive.vision) ||
+        (contentActive.contact && !previousContentActive.contact)
+      ) {
+        AudioManager.playSfx(AUDIO_ASSETS.cardRender);
+      }
+      previousContentActive = { ...contentActive };
 
       pointerSmooth.x = THREE.MathUtils.lerp(pointerSmooth.x, pointerTarget.x, 0.07);
       pointerSmooth.y = THREE.MathUtils.lerp(pointerSmooth.y, pointerTarget.y, 0.07);
@@ -569,6 +655,7 @@
       };
 
       renderer.dispose();
+      AudioManager.stopAmbience();
       document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
       
@@ -614,6 +701,36 @@
           <input type="checkbox" bind:checked={showDebugHud} />
           <span>show debug window</span>
         </label>
+
+        <div class="slider-group">
+          <div class="slider-head">
+            <p>ambience volume</p>
+            <span>{Math.round(ambienceVolume * 100)}%</span>
+          </div>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={ambienceVolume}
+            on:input={handleAmbienceVolumeInput}
+          />
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-head">
+            <p>sfx volume</p>
+            <span>{Math.round(sfxVolume * 100)}%</span>
+          </div>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={sfxVolume}
+            on:input={handleSfxVolumeInput}
+          />
+        </div>
 
         <div class="color-group">
           <p>particle inner color</p>
@@ -845,6 +962,31 @@
 
   .color-group {
     margin-bottom: 0.72rem;
+  }
+
+  .slider-group {
+    margin: 0 0 0.72rem;
+  }
+
+  .slider-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.34rem;
+  }
+
+  .slider-head p,
+  .slider-head span {
+    margin: 0;
+    color: rgba(216, 230, 252, 0.84);
+    font: 400 0.82rem/1.2 'Space Grotesk', sans-serif;
+    text-transform: lowercase;
+  }
+
+  .slider-group input[type='range'] {
+    width: 100%;
+    accent-color: #dfeeff;
+    cursor: pointer;
   }
 
   .color-group p {
