@@ -27,14 +27,17 @@
 
 <section
   class="vision-overlay"
+  class:active={active}
   aria-hidden={!active}
   style:opacity={overlayOpacity}
   style:visibility={overlayVisibility}
   style:transform={overlayTransform}
 >
-  <p class="eyebrow">Checkpoint 05</p>
   <h1>My Vision</h1>
-  <p class="subtitle">building full-stack and cloud-native products that are clean, scalable, and human</p>
+  <div class="subtitles">
+    <p class="subtitle">i don't just write code.</p>
+    <p class="subtitle">i orchestrate systems that scale beyond me.</p>
+  </div>
 </section>
 
 <style>
@@ -50,31 +53,37 @@
     transition: opacity 220ms ease;
   }
 
-  .eyebrow {
-    font-family: 'Space Grotesk', sans-serif;
-    color: rgba(172, 198, 255, 0.72);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    font-size: 0.68rem;
-    margin-bottom: 0.6rem;
-  }
-
   h1 {
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 500;
     font-size: clamp(2.1rem, 7.1vw, 5.2rem);
     letter-spacing: -0.02em;
     line-height: 0.98;
-    margin: 0;
+    margin-bottom: 1.5rem;
     color: rgba(241, 246, 255, 0.98);
   }
 
   .subtitle {
-    margin-top: 0.72rem;
     font-size: clamp(1rem, 2.35vw, 2rem);
     letter-spacing: -0.01em;
     color: rgba(226, 236, 255, 0.86);
     text-transform: lowercase;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 420ms cubic-bezier(.2,.9,.3,1), transform 420ms cubic-bezier(.2,.9,.3,1);
+  }
+
+  .vision-overlay.active .subtitle {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* stagger lines */
+  .subtitles .subtitle:nth-child(1) { transition-delay: 140ms; }
+  .subtitles .subtitle:nth-child(2) { transition-delay: 300ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .subtitle { transition: none !important; transform: none !important; }
   }
 
   @media (max-width: 700px) {

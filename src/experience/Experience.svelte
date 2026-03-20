@@ -29,7 +29,7 @@
     about: new THREE.Vector3(10.8, 4.4, 24),
     experience: new THREE.Vector3(3.5, 4.5, -15),
     projects: new THREE.Vector3(8, 4.2, -34),
-    vision: new THREE.Vector3(30, 0, -55),
+    vision: new THREE.Vector3(1, 12, -67),
     contact: new THREE.Vector3(0, 17.2, 0.9)
   };
 
@@ -62,8 +62,8 @@
   let outerInput = galaxyOuterColor;
   const CONTENT_ENTRY = 0.1;
   const CONTENT_EXIT = 0.82;
-  const ABOUT_CONTENT_EXIT = 0.6;
-  const EXPERIENCE_CONTENT_EXIT = 0.560;
+  const ABOUT_CONTENT_EXIT = 0.463;
+  const EXPERIENCE_CONTENT_EXIT = 0.5;
 
   let introMaskOpacity = 1;
   let uiAnchors: Record<CheckpointId, UIAnchor> = {
@@ -222,6 +222,7 @@
     const stars = new THREE.Points(starsGeometry, starsMaterial);
     scene.add(stars);
 
+    
     const ambient = new THREE.AmbientLight('#9fb8ff', 0.28);
     const pointA = new THREE.PointLight('#ffb870', 2, 180);
     pointA.position.set(0, 8, 30);
@@ -570,6 +571,7 @@
       renderer.dispose();
       document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
+      
     };
   });
 </script>
@@ -731,7 +733,7 @@
   .ui-layer {
     position: absolute;
     inset: 0;
-    pointer-events: none;
+    pointer-events: auto;
     z-index: 30;
   }
 

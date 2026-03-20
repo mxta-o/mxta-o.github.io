@@ -9,15 +9,15 @@ const DEFAULT_COLORS: IconColorSet = {
 export function create(anchor: THREE.Vector3, colors: IconColorSet = DEFAULT_COLORS): IconController {
   return createParticleIcon({
     anchor,
-    count: 1540,
+    count: 2860,
     colors,
     pointSize: 0.053,
     scatterRadius: [12, 44],
     blendOpacity: [0.12, 0.98],
     buildShape: (index) => {
-      const bubbleCount = 980;
-      const tailCount = 210;
-      const ringCount = 220;
+      const bubbleCount = 2048;
+      const tailCount = 410;
+      const ringCount = 380;
 
       if (index < bubbleCount) {
         const t = index / Math.max(1, bubbleCount - 1);

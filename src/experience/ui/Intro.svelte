@@ -74,7 +74,6 @@
   style:--anchor-scale={Math.max(anchor.scale, 0.92)}
   style:visibility={anchor.visible ? 'visible' : 'hidden'}
 >
-  <p class="eyebrow">Checkpoint 01</p>
   <h1>Hey, I&apos;m Jaelan</h1>
   <p class="subtitle">scroll to explore my universe</p>
 </section>
@@ -96,15 +95,6 @@
     text-shadow: 0 4px 22px rgba(0, 0, 0, 0.58);
   }
 
-  .eyebrow {
-    font-family: 'Space Grotesk', sans-serif;
-    color: rgba(172, 198, 255, 0.72);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    font-size: 0.68rem;
-    margin-bottom: 0.6rem;
-  }
-
   h1 {
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 500;
@@ -122,7 +112,6 @@
     color: rgba(226, 236, 255, 0.86);
     text-transform: lowercase;
   }
-
   @media (max-width: 700px) {
     .intro-overlay {
       transform: translate3d(

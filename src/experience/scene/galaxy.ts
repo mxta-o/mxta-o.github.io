@@ -4,6 +4,7 @@ export type GalaxyController = {
   points: THREE.Points;
   update: (deltaSeconds: number, depthProgress?: number) => void;
   setColors: (innerColor: string, outerColor: string) => void;
+  pulse: (strength: number, duration: number) => void;
   dispose: () => void;
 };
 
@@ -113,6 +114,16 @@ export function createGalaxy(userOptions: GalaxyOptions = {}): GalaxyController 
   let chunkCursor = 0;
   const chunkSize = Math.max(1200, Math.floor(options.particleCount * 0.12));
 
+  let pulseTime = 0;
+  let pulseDuration = 0;
+  let pulseStrength = 0;
+
+  const pulse = (strength: number, duration: number) => {
+    pulseStrength = Math.max(0, strength);
+    pulseDuration = Math.max(0.001, duration);
+    pulseTime = pulseDuration;
+  };
+
   return {
     points,
     update(deltaSeconds: number, depthProgress = 0) {
@@ -126,7 +137,19 @@ export function createGalaxy(userOptions: GalaxyOptions = {}): GalaxyController 
       // Mutate a moving chunk each frame so deeper sections feel more turbulent without full-buffer cost.
       const start = chunkCursor;
       const end = Math.min(options.particleCount, start + chunkSize);
-      const baseAmp = THREE.MathUtils.lerp(0.03, 1.2, depthChaos);
+      // base amplitude of motion
+      let baseAmp = THREE.MathUtils.lerp(0.03, 1.2, depthChaos);
+
+      // apply pulse (temporary brightening/turbulence) if active
+      if (pulseTime > 0) {
+        const tNorm = 1 - Math.max(0, pulseTime) / pulseDuration; // 0..1
+        const ease = Math.sin(tNorm * Math.PI * 0.5); // ease-out
+        const ampBoost = 1 + pulseStrength * 0.9 * ease;
+        baseAmp *= ampBoost;
+        material.opacity = THREE.MathUtils.lerp(material.opacity, 0.98 + 0.02 * pulseStrength, 0.6);
+        material.size = THREE.MathUtils.lerp(material.size, options.pointSize * (1.0 + 0.3 * pulseStrength), 0.6);
+        pulseTime -= deltaSeconds;
+      }
 
       for (let i = start; i < end; i += 1) {
         const i3 = i * 3;
@@ -141,7 +164,6 @@ export function createGalaxy(userOptions: GalaxyOptions = {}): GalaxyController 
 
       chunkCursor = end >= options.particleCount ? 0 : end;
       positionAttr.needsUpdate = true;
-
       material.size = THREE.MathUtils.lerp(options.pointSize, options.pointSize * 1.22, depthChaos);
       material.opacity = THREE.MathUtils.lerp(0.88, 0.98, depthChaos);
     },
@@ -160,6 +182,7 @@ export function createGalaxy(userOptions: GalaxyOptions = {}): GalaxyController 
 
       colorAttr.needsUpdate = true;
     },
+    pulse,
     dispose() {
       geometry.dispose();
       material.dispose();
