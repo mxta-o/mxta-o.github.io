@@ -13,7 +13,7 @@ type AmbienceOpts = {
 class _AudioManager {
   private ambience: HTMLAudioElement | null = null;
   private ambienceSrc = '';
-  private ambienceVolume = 0.6;
+  private ambienceVolume = 0.2;
   private sfxVolume = 1;
   private muted = false;
 

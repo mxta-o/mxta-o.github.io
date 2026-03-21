@@ -259,7 +259,7 @@
     const renderer = createRenderer(canvas);
 
     const galaxy: GalaxyController = createGalaxy({
-      particleCount: 62000,
+      particleCount: 50000,
       innerColor: galaxyInnerColor,
       outerColor: galaxyOuterColor
     });
