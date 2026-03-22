@@ -16,7 +16,7 @@
   import { CheckpointSystem, type CheckpointId } from './systems/checkpointSystem';
   import Intro from './ui/Intro.svelte';
   import About from './ui/About.svelte';
-  import ExperienceSection from './ui/ExperienceSection.svelte';
+  import Work from './ui/Work.svelte';
   import Projects from './ui/Projects.svelte';
   import Vision from './ui/Vision.svelte';
   import Contact from './ui/Contact.svelte';
@@ -259,7 +259,7 @@
     const renderer = createRenderer(canvas);
 
     const galaxy: GalaxyController = createGalaxy({
-      particleCount: 50000,
+      particleCount: 25000,
       innerColor: galaxyInnerColor,
       outerColor: galaxyOuterColor
     });
@@ -784,7 +784,7 @@
       anchor={uiAnchors.about}
       materialized={clusterReady.about}
     />
-    <ExperienceSection
+    <Work
       active={contentActive.experience}
       progress={sectionProgress}
       anchor={uiAnchors.experience}
