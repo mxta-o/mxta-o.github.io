@@ -28,7 +28,7 @@
   const CHECKPOINT_ANCHORS: Record<CheckpointId, THREE.Vector3> = {
     intro: new THREE.Vector3(-14, 3, 26),
     about: new THREE.Vector3(10.8, 4.4, 24),
-    experience: new THREE.Vector3(3.5, 4.5, -15),
+    experience: new THREE.Vector3(3.5, 4.5, -20),
     projects: new THREE.Vector3(8, 4.2, -34),
     vision: new THREE.Vector3(1, 12, -67),
     contact: new THREE.Vector3(0, 17.2, 0.9)
@@ -74,7 +74,7 @@
   const CONTENT_ENTRY = 0.1;
   const CONTENT_EXIT = 0.82;
   const ABOUT_CONTENT_EXIT = 0.463;
-  const EXPERIENCE_CONTENT_EXIT = 0.5;
+  const EXPERIENCE_CONTENT_EXIT = 0.563;
 
   let introMaskOpacity = 1;
   let uiAnchors: Record<CheckpointId, UIAnchor> = {
@@ -268,7 +268,7 @@
     galaxyController = galaxy;
 
     const galaxyMaterial = galaxy.points.material as THREE.PointsMaterial;
-    galaxyMaterial.opacity = 0;
+    galaxyMaterial.opacity = 1;
 
     const starsGeometry = new THREE.BufferGeometry();
     const starsCount = 1800;

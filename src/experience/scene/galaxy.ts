@@ -23,10 +23,10 @@ export type GalaxyOptions = {
 const DEFAULTS: Required<GalaxyOptions> = {
   particleCount: 50000,
   radius: 42,
-  branches: 6,
+  branches: 12,
   spin: 1.15,
-  randomness: 0.5,
-  randomnessPower: 2.3,
+  randomness: 1.4,
+  randomnessPower: 9,
   pointSize: 0.05,
   innerColor: '#ffb870',
   outerColor: '#6ca2ff'
