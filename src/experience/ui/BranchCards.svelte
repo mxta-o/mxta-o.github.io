@@ -693,6 +693,10 @@
       left: clamp(0.8rem, 4vw, 1.2rem) !important;
       right: auto !important;
     }
+    .header-card {
+      display: none !important;
+      pointer-events: none !important;
+    }
   }
 
   @keyframes branch-ring-spin {
