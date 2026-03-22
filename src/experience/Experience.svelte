@@ -26,7 +26,7 @@
   const SECTION_ORDER: CheckpointId[] = ['intro', 'about', 'experience', 'projects', 'vision', 'contact'];
 
   const CHECKPOINT_ANCHORS: Record<CheckpointId, THREE.Vector3> = {
-    intro: new THREE.Vector3(-7.5, 8.2, 52),
+    intro: new THREE.Vector3(-14, 3, 26),
     about: new THREE.Vector3(10.8, 4.4, 24),
     experience: new THREE.Vector3(3.5, 4.5, -15),
     projects: new THREE.Vector3(8, 4.2, -34),
@@ -61,8 +61,8 @@
     ambience: '/audio/ambience.mp3',
     cardRender: '/audio/card-render.mp3'
   };
-  let ambienceVolume = 0.42;
-  let sfxVolume = 0.72;
+  let ambienceVolume = 0.35;
+  let sfxVolume = 0.7;
   const AUDIO_STORAGE_KEYS = {
     ambienceVolume: 'experience.audio.ambienceVolume',
     sfxVolume: 'experience.audio.sfxVolume'
