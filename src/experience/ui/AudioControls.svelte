@@ -44,16 +44,6 @@
 
 <div class="audio-controls">
   <button type="button" on:click={toggle}>{muted ? 'Unmute' : 'Mute'}</button>
-  <div class="row">
-    <label>Ambience</label>
-    <input type="range" min="0" max="1" step="0.01" bind:value={ambienceVol} on:input={handleAmbienceInput} />
-    <button type="button" on:click={playAmbience}>Play</button>
-    <button type="button" on:click={stopAmbience}>Stop</button>
-  </div>
-  <div class="row">
-    <label>SFX</label>
-    <input type="range" min="0" max="1" step="0.01" bind:value={sfxVol} on:input={handleSfxInput} />
-  </div>
 </div>
 
 <style>
@@ -64,6 +54,4 @@
     font-family: 'Space Grotesk', sans-serif;
     color: rgba(232,240,255,0.95);
   }
-  .row { display: flex; gap: 0.5rem; align-items: center; }
-  input[type='range'] { width: 9rem; }
 </style>
