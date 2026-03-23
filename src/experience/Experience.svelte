@@ -207,9 +207,10 @@
 
   const projectToScreen = (camera: THREE.PerspectiveCamera, worldPoint: THREE.Vector3): UIAnchor => {
     const projected = worldPoint.clone().project(camera);
-    const inDepthRange = projected.z > -1.2 && projected.z < 1.1;
+    // Relaxed bounds to be more tolerant on narrow/mobile viewports
+    const inDepthRange = projected.z > -1.3 && projected.z < 1.2;
     const inViewport =
-      projected.x > -1.02 && projected.x < 1.02 && projected.y > -1.02 && projected.y < 1.02;
+      projected.x > -1.12 && projected.x < 1.12 && projected.y > -1.12 && projected.y < 1.12;
     const inView = inDepthRange && inViewport;
 
     if (!inView) {
@@ -571,7 +572,26 @@
         const base = projectToScreen(camera, CHECKPOINT_ANCHORS[id]);
         const focusWeight = getFocusWeight(id, activeSection, sectionProgress);
 
-        if (!base.visible || focusWeight < 0.05) {
+        // If the world point projects off-screen, allow the currently active section
+        // a small grace period (based on sectionProgress) so it can transition out
+        // smoothly on narrow/mobile viewports.
+        if (!base.visible) {
+          if (id === activeSection && sectionProgress < 0.22) {
+            projectedAnchors[id] = {
+              x: window.innerWidth * 0.5,
+              y: window.innerHeight * 0.6,
+              scale: THREE.MathUtils.clamp(0.8 * (1 - sectionProgress * 0.5), 0.36, 0.92),
+              opacity: THREE.MathUtils.clamp(1 - sectionProgress * 1.6, 0.3, 1),
+              visible: true
+            };
+            return;
+          }
+
+          projectedAnchors[id] = HIDDEN_ANCHOR;
+          return;
+        }
+
+        if (focusWeight < 0.05) {
           projectedAnchors[id] = HIDDEN_ANCHOR;
           return;
         }
