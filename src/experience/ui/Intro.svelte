@@ -11,6 +11,8 @@
   let root: HTMLElement | null = null;
   let previousActive = false;
   let previousMaterialized = false;
+  let useCentered = false;
+  let introScale = 1;
 
   const ENTRY_DELAY = 0.14;
 
@@ -41,9 +43,26 @@
 
   onMount(() => {
     gsap.set(root, { autoAlpha: 0, '--lift': '18px', '--pop': 0.94, pointerEvents: 'none' });
+
+    const updateLayout = () => {
+      if (typeof window === 'undefined') return;
+      const w = window.innerWidth;
+      useCentered = w <= 900;
+      const s = Math.max(0.78, Math.min(1.06, w / 1200 + 0.2));
+      introScale = s;
+      if (root) root.style.setProperty('--intro-scale', String(introScale));
+    };
+
+    updateLayout();
+    window.addEventListener('resize', updateLayout);
+
     if (active && materialized) animateIn();
     previousActive = active;
     previousMaterialized = materialized;
+
+    return () => {
+      window.removeEventListener('resize', updateLayout);
+    };
   });
 
   $: if (root && (active !== previousActive || materialized !== previousMaterialized)) {
@@ -68,10 +87,12 @@
 <section
   bind:this={root}
   class="intro-overlay"
+  class:centered={useCentered}
   style:--anchor-x={`${anchor.x}px`}
   style:--anchor-y={`${anchor.y}px`}
   style:--anchor-opacity={anchor.opacity}
   style:--anchor-scale={Math.max(anchor.scale, 0.92)}
+  style:--intro-scale={introScale}
   style:visibility={anchor.visible ? 'visible' : 'hidden'}
 >
   <h1>Hey, I&apos;m Jaelan</h1>
@@ -88,7 +109,7 @@
         calc(var(--anchor-y) - clamp(8rem, 13vh, 11rem) + var(--lift, 0px)),
         0
       )
-      scale(calc(var(--anchor-scale, 1) * var(--pop, 1)));
+      scale(calc(var(--anchor-scale, 1) * var(--pop, 1) * var(--intro-scale, 1)));
     opacity: var(--anchor-opacity, 0);
     width: min(54rem, calc(100vw - 3rem));
     padding: clamp(0.4rem, 1.2vw, 0.8rem);
@@ -119,8 +140,16 @@
           calc(var(--anchor-y) - clamp(7rem, 11vh, 9rem) + var(--lift, 0px)),
           0
         )
-        scale(calc(var(--anchor-scale, 1) * var(--pop, 1)));
+        scale(calc(var(--anchor-scale, 1) * var(--pop, 1) * var(--intro-scale, 1)));
       width: min(92vw, 34rem);
     }
+  }
+  
+  /* centered runtime class - uses --intro-scale for final sizing */
+  .intro-overlay.centered {
+    left: 50% !important;
+    top: 42% !important;
+    transform: translate(-50%, -50%) scale(calc(var(--intro-scale, 1) * var(--pop, 1))) !important;
+    width: min(92vw, 34rem) !important;
   }
 </style>
