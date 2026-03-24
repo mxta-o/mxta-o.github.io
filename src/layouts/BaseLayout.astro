@@ -4,6 +4,8 @@ interface Props {
   description?: string;
 }
 
+import EnterOverlay from '../experience/ui/EnterOverlay.svelte';
+
 const { title, description = "Software Engineering Student | Full-Stack Developer" } = Astro.props;
 ---
 
@@ -19,6 +21,7 @@ const { title, description = "Software Engineering Student | Full-Stack Develope
   </head>
   <body class="bg-black text-white antialiased">
     <slot />
+    <EnterOverlay client:load />
   </body>
 </html>
 

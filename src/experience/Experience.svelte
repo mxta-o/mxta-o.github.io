@@ -232,8 +232,9 @@
     };
   };
 
-  onMount(() => {
-    if (!canvas) return;
+  // Delay heavy initialization until user has entered the site (gesture + overlay fade)
+  function initExperience() {
+    if (!canvas) return () => {};
 
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
@@ -250,7 +251,7 @@
     AudioManager.preload(AUDIO_ASSETS.cardRender);
     AudioManager.setSfxVolume(sfxVolume);
     AudioManager.setAmbience(AUDIO_ASSETS.ambience, { loop: true, volume: ambienceVolume });
-    AudioManager.enableOnUserGesture();
+    // Start ambience only after user gesture (site:entered) — play now
     AudioManager.playAmbience();
 
     const scene = new THREE.Scene();
@@ -296,7 +297,6 @@
     const stars = new THREE.Points(starsGeometry, starsMaterial);
     scene.add(stars);
 
-    
     const ambient = new THREE.AmbientLight('#9fb8ff', 0.28);
     const pointA = new THREE.PointLight('#ffb870', 2, 180);
     pointA.position.set(0, 8, 30);
@@ -679,6 +679,26 @@
       document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
       
+    };
+  }
+
+  onMount(() => {
+    let cleanup: (() => void) | null = null;
+
+    const start = () => {
+      const fn = initExperience();
+      if (typeof fn === 'function') cleanup = fn;
+    };
+
+    if ((window as any).__siteEntered) {
+      start();
+    } else {
+      window.addEventListener('site:entered', start, { once: true });
+    }
+
+    return () => {
+      if (cleanup) cleanup();
+      window.removeEventListener('site:entered', start);
     };
   });
 </script>
