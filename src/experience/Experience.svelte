@@ -123,6 +123,9 @@
     contact: null
   };
 
+  // Whether the user has entered the site (cleared overlay). Controls UI render timing.
+  let siteEntered = false;
+
   const isValidHex = (value: string) => /^#([0-9a-fA-F]{6})$/.test(value);
 
   const navigateTo = (section: CheckpointId, sectionTarget = 0.5) => {
@@ -686,11 +689,13 @@
     let cleanup: (() => void) | null = null;
 
     const start = () => {
+      siteEntered = true;
       const fn = initExperience();
       if (typeof fn === 'function') cleanup = fn;
     };
 
     if ((window as any).__siteEntered) {
+      siteEntered = true;
       start();
     } else {
       window.addEventListener('site:entered', start, { once: true });
@@ -707,35 +712,36 @@
   <canvas bind:this={canvas} class="experience-canvas" class:look-active={lookActive} aria-hidden="true"></canvas>
 
   <div class="control-layer">
-    <nav class="top-nav" aria-label="Scene Navigation">
-      {#each NAV_ITEMS as item}
-        <button
-          class="nav-link"
-          class:is-current={activeSection === item.section}
-          on:click={() => navigateTo(item.section, item.sectionProgress)}
-          type="button"
+    {#if siteEntered}
+      <nav class="top-nav" aria-label="Scene Navigation">
+        {#each NAV_ITEMS as item}
+          <button
+            class="nav-link"
+            class:is-current={activeSection === item.section}
+            on:click={() => navigateTo(item.section, item.sectionProgress)}
+            type="button"
+          >
+            {item.label}
+          </button>
+        {/each}
+      </nav>
+
+      <button class="settings-trigger" type="button" on:click={() => (showSettings = !showSettings)}>
+        settings
+      </button>
+
+      {#if showSettings}
+        <section
+          class="settings-modal"
+          role="dialog"
+          aria-label="Experience Settings"
+          in:fade={{ duration: 180 }}
+          out:fade={{ duration: 180 }}
         >
-          {item.label}
-        </button>
-      {/each}
-    </nav>
-
-    <button class="settings-trigger" type="button" on:click={() => (showSettings = !showSettings)}>
-      settings
-    </button>
-
-    {#if showSettings}
-      <section
-        class="settings-modal"
-        role="dialog"
-        aria-label="Experience Settings"
-        in:fade={{ duration: 180 }}
-        out:fade={{ duration: 180 }}
-      >
-        <div class="settings-head">
-          <h2>settings</h2>
-          <button type="button" class="close-btn" on:click={() => (showSettings = false)}>x</button>
-        </div>
+          <div class="settings-head">
+            <h2>settings</h2>
+            <button type="button" class="close-btn" on:click={() => (showSettings = false)}>x</button>
+          </div>
 
         <label class="check-row">
           <input type="checkbox" bind:checked={showDebugHud} />
@@ -809,15 +815,18 @@
         </div>
       </section>
     {/if}
+    {/if}
   </div>
 
   <div class="ui-layer">
-    <Intro
-      active={activeSection === 'intro'}
-      progress={sectionProgress}
-      anchor={uiAnchors.intro}
-      materialized={true}
-    />
+    {#if siteEntered}
+      <Intro
+        active={activeSection === 'intro'}
+        progress={sectionProgress}
+        anchor={uiAnchors.intro}
+        materialized={true}
+      />
+    {/if}
     <About
       active={contentActive.about}
       progress={sectionProgress}

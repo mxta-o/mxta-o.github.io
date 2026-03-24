@@ -4,7 +4,7 @@
   import { AudioManager } from '../../lib/audio';
 
   const dispatch = createEventDispatcher();
-  let visible = true;
+  let visible = false;
 
   function enableAndClose() {
     try {
@@ -26,6 +26,14 @@
   }
 
   onMount(() => {
+    // If the site was already entered earlier, don't show the overlay
+    if (typeof window !== 'undefined' && (window as any).__siteEntered) {
+      visible = false;
+      return () => {};
+    }
+
+    // Trigger fade-in by enabling visibility after mount
+    visible = true;
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   });
@@ -48,9 +56,8 @@
   .text {
     color: #ffffff;
     font-family: 'Space Grotesk', sans-serif;
-    font-weight: 500;
     font-size: 1.25rem;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.05em;
     opacity: 0.95;
     user-select: none;
   }
@@ -65,7 +72,8 @@
   <button
     class="overlay"
     type="button"
-    transition:fade={{ duration: 220 }}
+    in:fade={{ duration: 280 }}
+    out:fade={{ duration: 220 }}
     on:click={enableAndClose}
     on:outroend={onOutroEnd}
     aria-label="Enter site"
