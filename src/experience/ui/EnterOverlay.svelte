@@ -62,7 +62,14 @@
 </style>
 
 {#if visible}
-  <div class="overlay" transition:fade={{ duration: 220 }} on:click={enableAndClose} on:outroend={onOutroEnd} role="button" aria-label="Enter site">
+  <button
+    class="overlay"
+    type="button"
+    transition:fade={{ duration: 220 }}
+    on:click={enableAndClose}
+    on:outroend={onOutroEnd}
+    aria-label="Enter site"
+  >
     <div class="text">click to enter</div>
-  </div>
+  </button>
 {/if}
