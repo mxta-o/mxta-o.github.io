@@ -5,7 +5,7 @@
 % License : MIT
 %------------------------
 
-\documentclass[letterpaper,11pt]{article}
+\documentclass[letterpaper,10pt]{article}
 
 \usepackage{latexsym}
 \usepackage[empty]{fullpage}
@@ -51,6 +51,7 @@
 \raggedbottom
 \raggedright
 \setlength{\tabcolsep}{0in}
+
 
 % Sections formatting
 \titleformat{\section}{
@@ -112,7 +113,7 @@
 % \end{tabular*}
 
 \begin{center}
-    \textbf{\Huge \scshape Jaelan Cruz} \\ \vspace{1pt}
+    \textbf{\huge \scshape Jaelan Cruz} \\ \vspace{1pt}
     \href{mailto:jaelancruz@yahoo.com}{\underline{jaelancruz@yahoo.com}} $|$ 
     \href{https://linkedin.com/in/jaelan-cruz}{\underline{LinkedIn}} $|$
     \href{https://github.com/mxta-o}{\underline{Github}} $|$
@@ -121,7 +122,7 @@
 
 %-----------SUMMARY-----------
 \section{Summary}
-\small{Computer Science student at York University with hands-on experience in full-stack web development. Full-Stack Engineer at Circe, building \textbf{React} and \textbf{TypeScript} frontends alongside RESTful APIs with \textbf{Python}, \textbf{FastAPI}, and \textbf{PostgreSQL}. Proficient in building scalable web applications with a focus on security, maintainability, and intuitive user experiences.}
+\small{Full-Stack Engineer and Computer Science student focused on building \textbf{high-performance interactive} systems that prioritize \textbf{user experience}.}
 
 
 %-----------EDUCATION-----------
@@ -150,18 +151,25 @@
         \resumeItem{Engineered \textbf{5 authentication flows} (sign-in, sign-up, confirmation, password reset, forgot password) with robust validation and real-time error messaging, enhancing \textbf{account security} and reducing \textbf{user errors}.}
         \resumeItem{Refactored \textbf{2,000+ lines} across \textbf{8+ files} for \textbf{reduced duplication} and \textbf{streamlined development}, which simplified maintenance and enabled faster feature updates.}
       \resumeItemListEnd
-
-  \resumeSubHeadingListEnd
+    \resumeSubHeadingListEnd
 
 
 %-----------PROJECTS-----------
 \section{Projects}
     \resumeSubHeadingListStart
       \resumeProjectHeading
+          {\textbf{Interactive 3D Portfolio Experience} $|$ \emph{Astro, Svelte, Three.js, GSAP, TailwindCSS}}{}
+          \resumeItemListStart
+            \resumeItem{Engineered a \textbf{modular, checkpoint‑driven} 3D portfolio with reusable scene systems; galaxy renders \textbf{25,000+ particles} and a \textbf{1,800‑star} field using a single merged \textbf{Points} buffer.}
+            \resumeItem{Built \textbf{GSAP} timelines and an \textbf{AudioManager} to synchronize animations and SFX across \textbf{six checkpoint} sections for smooth, \textbf{scroll‑driven} guided interactions.}
+            \resumeItem{Reduced runtime cost via \textbf{chunked buffer updates} (\textbf{12\%} of particles per frame, min \textbf{1.2k}), \textbf{renderer tuning}, and \textbf{depth‑based} size/opacity adjustments.}
+            \resumeItem{Automated builds and deployments using \textbf{GitHub Actions} (\textbf{build → artifact → deploy}) for repeatable production releases.}
+          \resumeItemListEnd
+
+      \resumeProjectHeading
           {\textbf{jamSpace} $|$ \emph{Python, Flask, HTML, CSS, JavaScript}}{}
           \resumeItemListStart
             \resumeItem{Developed a full-stack productivity web application using \textbf{Flask} and modular \textbf{Blueprint architecture} for \textbf{scalable route management}.}
-            \resumeItem{Refactored and unified \textbf{600+ lines} of legacy calendar code, merging weekly/monthly views into a \textbf{single planner}.}
             \resumeItem{Removed \textbf{5+ obsolete files} and reduced codebase clutter by \textbf{1,000+ lines} via systematic cleanup.}
             \resumeItem{Enhanced \textbf{UI/UX} with custom CSS/JavaScript for \textbf{responsive design}, modals, and advanced animations.}
           \resumeItemListEnd
@@ -169,7 +177,7 @@
       \resumeProjectHeading
           {\textbf{PixelCraft} $|$ \emph{Java, Bash, OOP, CLI, HTML, CSS}}{}
           \resumeItemListStart
-            \resumeItem{Developed a modular image processing tool supporting batch transformations with \textbf{8+ filters} (grayscale, blur, flip, high contrast, negative, red channel, rotate, vibrancy), processing \textbf{1,000+ images} in testing.}
+            \resumeItem{Developed an image processing tool supporting batch transformations with \textbf{8+ filters}, processing \textbf{1,000+ images} in testing.}
             \resumeItem{Designed extensible \textbf{OOP} architecture using \textbf{Java Reflection} for dynamic filter selection and rapid addition of new effects.}
             \resumeItem{Implemented a \textbf{command-line interface} and \textbf{10+ Bash scripts} for flexible usage and \textbf{100\% automated batch workflows}.}
             \resumeItem{Processed \textbf{PNG images} and automated file management for efficient, large-scale operations.}
@@ -183,11 +191,11 @@
 \section{Technical Skills}
  \begin{itemize}[leftmargin=0.15in, label={}]
     \item
-  \textbf{Programming Languages}{: Java, Python, C, JavaScript, TypeScript, HTML5, CSS, Bash} \\
+  \textbf{Programming Languages}{: Java, Python, C, C++, JavaScript, TypeScript, HTML5, CSS, Bash} \\
   \textbf{Libraries \& Frameworks}{: React, FastAPI, Astro, Svelte, Three.js, GSAP, WebGL, Flask, TailwindCSS, Formik, Yup, Jinja2} \\
   \textbf{Databases}{: PostgreSQL} \\
-  \textbf{Tools \& Platforms}{: Git, GitHub, AWS, Docker, VS Code, Linux, GitHub Actions,} \\
-  \textbf{AI \& Automation}{: GPT-4o, Claude Sonnet 3.5, Copilot}
+  \textbf{Tools \& Platforms}{: Git, GitHub, AWS, Docker, VS Code, Linux, GitHub Actions, Jest, pytest} \\
+  \textbf{AI \& Automation}{: GPT-5 mini, Claude Sonnet 3.5, Copilot}
  \end{itemize}
 
 
