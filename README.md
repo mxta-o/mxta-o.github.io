@@ -30,13 +30,11 @@ npm run preview
 
 ```
 /
-├── astro.config.mjs        # Astro configuration
-├── package.json            # npm manifest and scripts
-├── README.md               # Project readme
-├── infofill.md             # (page — optional; safe to delete if unused)
-├── resume.tex              # LaTeX resume source
-├── tailwind.config.mjs     # Tailwind CSS config
-├── tsconfig.json           # TypeScript config
+├── astro.config.mjs
+├── package.json
+├── README.md
+├── tailwind.config.mjs
+├── tsconfig.json
 ├── public/                 # Static assets (images, favicons, robots.txt, audio)
 │   ├── robots.txt
 │   └── audio/              # audio files and related README
