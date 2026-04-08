@@ -42,46 +42,16 @@ npm run preview
 └── package.json
 ```
 
-## Project Structure
+## Features
 
-```
-/
-├── public/
-├── src/
-│   ├── experience/
-│   │   ├── scene/
-│   │   ├── systems/
-│   │   └── ui/
-│   ├── layouts/
-│   ├── lib/
-│   └── pages/
-├── .github/
-├── dist/
-├── node_modules/
-├── astro.config.mjs
-├── package.json
-├── tailwind.config.mjs
-├── tsconfig.json
-└── README.md
-```
+- Y2K-inspired minimalistic design
+- Immersive (or i intend it to) experience
+- Interactive 3D shapes and animations
+- Smooth scroll animations
+- Responsive design
+- Optimized performance with Astro's Islands Architecture
 
-```
-/                         # Repo root
-├── public/                # Static assets (images, favicons, robots)
-├── src/                   # Source code
-│   ├── experience/        # 3D experience entrypoints (scene, systems, UI)
-│   │   ├── scene/         # Scene setup, renderer, cameras
-│   │   ├── systems/       # Interaction and update systems
-│   │   └── ui/            # Svelte UI components used by the experience
-│   ├── layouts/           # Page layout components
-│   ├── lib/               # Utilities, helpers, API clients
-│   └── pages/             # Route pages (index, project pages)
-├── .github/               # CI / workflow configs
-├── dist/                  # Build output (production assets)
-├── node_modules/          # Installed dependencies
-├── astro.config.mjs       # Astro config
-├── package.json           # Dependencies & scripts
-├── tailwind.config.mjs    # Tailwind config
-├── tsconfig.json          # TypeScript config
-└── README.md              # This file
-```
+## License
+
+MIT
+portfolio web
