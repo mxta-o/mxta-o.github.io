@@ -1,1 +1,0 @@
-just to keep note of for the future, but let's work more towards 3d animations. you, or we, really want to have some good design skills. :]
