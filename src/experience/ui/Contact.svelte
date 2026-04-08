@@ -18,7 +18,7 @@
     linkedin: 'https://linkedin.com/in/jaelan-cruz/',
     github: 'https://github.com/mxta-o',
     resume: '/resume.pdf',
-    instagram: 'https://instagram.com/jxelxn_c/',
+    instagram: 'https://instagram.com/jxelxn.sh/',
     // keep the raw username in connectLinks for copying
     discord: '.ehlan',
     email: 'mailto:jaelancruz@yahoo.com'
