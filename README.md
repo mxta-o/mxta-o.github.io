@@ -29,7 +29,6 @@ npm run preview
 ## Project Structure
 
 ```
-/
 ├── astro.config.mjs
 ├── package.json
 ├── README.md
