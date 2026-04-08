@@ -90,9 +90,9 @@
   {materialized}
   leftTitle="Tech Stack"
   leftLines={[
-    'Languages: Java, Python, C, JavaScript, TypeScript, HTML5, CSS, Bash',
-    'Frameworks: React, FastAPI, Astro, Svelte, Three.js, Flask, TailwindCSS',
-    'Tools: PostgreSQL, AWS, Docker, GitHub Actions, Linux'
+    'Languages: Java, Python, C, C++, JavaScript, TypeScript, SQL, HTML5, CSS, Bash',
+    'Frameworks: React, FastAPI, Astro, Svelte, Three.js, Flask, TailwindCSS, OpenGL, WebGL, GSAP, Expo',
+    'Tools: PostgreSQL, SQLite, AWS, Docker, GitHub Actions, Linux, CMake, Maven, JUnit, Jest'
   ]}
   rightTitle="Connect"
   rightLines={[]}
