@@ -2,7 +2,7 @@
 
 Jaelan Cruz's personal portfolio built with Astro, Svelte, Three.js, and Tailwind CSS.
 
-## 🚀 Tech Stack
+## Tech Stack
 
 - **Astro** - Static site generator with Islands Architecture
 - **Svelte** - Reactive UI components
@@ -10,7 +10,7 @@ Jaelan Cruz's personal portfolio built with Astro, Svelte, Three.js, and Tailwin
 - **Threlte** - Svelte bindings for Three.js
 - **Tailwind CSS** - Utility-first CSS framework
 
-## 🛠️ Development
+## Development
 
 ```bash
 # Install dependencies
@@ -26,11 +26,11 @@ npm run build
 npm run preview
 ```
 
-## 📦 Project Structure
+## Project Structure
 
 ```
 /
-├── public/           # Static assets
+├── public/                     # Static assets: images, favicons, robots.txt
 ├── src/
 │   ├── components/   # Reusable components
 │   │   ├── 3D/      # Three.js/Threlte components
@@ -42,15 +42,46 @@ npm run preview
 └── package.json
 ```
 
-## 🎨 Features
+## Project Structure
 
-- Y2K-inspired minimalistic design
-- Interactive 3D shapes and animations
-- Smooth scroll animations
-- Responsive design
-- Optimized performance with Astro's Islands Architecture
+```
+/
+├── public/
+├── src/
+│   ├── experience/
+│   │   ├── scene/
+│   │   ├── systems/
+│   │   └── ui/
+│   ├── layouts/
+│   ├── lib/
+│   └── pages/
+├── .github/
+├── dist/
+├── node_modules/
+├── astro.config.mjs
+├── package.json
+├── tailwind.config.mjs
+├── tsconfig.json
+└── README.md
+```
 
-## 📝 License
-
-MIT
-portfolio web
+```
+/                         # Repo root
+├── public/                # Static assets (images, favicons, robots)
+├── src/                   # Source code
+│   ├── experience/        # 3D experience entrypoints (scene, systems, UI)
+│   │   ├── scene/         # Scene setup, renderer, cameras
+│   │   ├── systems/       # Interaction and update systems
+│   │   └── ui/            # Svelte UI components used by the experience
+│   ├── layouts/           # Page layout components
+│   ├── lib/               # Utilities, helpers, API clients
+│   └── pages/             # Route pages (index, project pages)
+├── .github/               # CI / workflow configs
+├── dist/                  # Build output (production assets)
+├── node_modules/          # Installed dependencies
+├── astro.config.mjs       # Astro config
+├── package.json           # Dependencies & scripts
+├── tailwind.config.mjs    # Tailwind config
+├── tsconfig.json          # TypeScript config
+└── README.md              # This file
+```
