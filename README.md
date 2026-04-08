@@ -30,16 +30,24 @@ npm run preview
 
 ```
 /
-├── public/                     # Static assets: images, favicons, robots.txt
-├── src/
-│   ├── components/   # Reusable components
-│   │   ├── 3D/      # Three.js/Threlte components
-│   │   └── ...
-│   ├── layouts/     # Page layouts
-│   ├── pages/       # Route pages
-│   └── ...
-├── astro.config.mjs # Astro configuration
-└── package.json
+├── astro.config.mjs        # Astro configuration
+├── package.json            # npm manifest and scripts
+├── README.md               # Project readme
+├── infofill.md             # (page — optional; safe to delete if unused)
+├── resume.tex              # LaTeX resume source
+├── tailwind.config.mjs     # Tailwind CSS config
+├── tsconfig.json           # TypeScript config
+├── public/                 # Static assets (images, favicons, robots.txt, audio)
+│   ├── robots.txt
+│   └── audio/              # audio files and related README
+└── src/                    # Source: Astro pages, Svelte components, and app logic
+	├── env.d.ts
+	├── experience/        # 3D scene code and experience page components
+	├── systems/           # Reusable systems (scroll controller, checkpoints)
+	├── ui/                # Svelte UI components (About, Projects, Contact, etc.)
+	├── layouts/           # Page/layout components (BaseLayout.astro)
+	├── lib/               # Utility modules (audio helpers, libs)
+	└── pages/             # Astro route pages (index.astro)
 ```
 
 ## Features
