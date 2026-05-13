@@ -20,6 +20,8 @@
   export let leftStyle = '';
   export let rightStyle = '';
   export let headerStyle = '';
+  export let showAnchor = true;
+  export let compact = false;
   export let leftWidth = 'clamp(20rem, 34vw, 38rem)';
   export let rightWidth = 'clamp(20rem, 34vw, 38rem)';
   export let headerWidth = 'clamp(14rem, 24vw, 24rem)';
@@ -306,19 +308,22 @@
   <section
     bind:this={root}
     class="branch-stage"
+    class:compact={compact}
     class:is-exiting={!visibleState && renderGate}
     aria-hidden={!renderGate}
     style:opacity={visibleState ? 1 : 0}
     style:visibility={renderGate ? 'visible' : 'hidden'}
   >
-  <div
-    class="anchor-core"
-    style:opacity={visibleState ? 1 : 0}
-    style:transform={`translate3d(${anchor.x}px, ${anchor.y}px, 0) translate(-50%, -50%) scale(${0.74 + trunkReveal * 0.34})`}
-  >
-    <span class="core-dot"></span>
-    <span class="core-ring"></span>
-  </div>
+  {#if showAnchor}
+    <div
+      class="anchor-core"
+      style:opacity={visibleState ? 1 : 0}
+      style:transform={`translate3d(${anchor.x}px, ${anchor.y}px, 0) translate(-50%, -50%) scale(${0.74 + trunkReveal * 0.34})`}
+    >
+      <span class="core-dot"></span>
+      <span class="core-ring"></span>
+    </div>
+  {/if}
 
   <svg class="wire-layer" viewBox={`0 0 ${viewportWidth} ${viewportHeight}`} preserveAspectRatio="none" aria-hidden="true">
     <path
@@ -697,6 +702,20 @@
       display: none !important;
       pointer-events: none !important;
     }
+  }
+
+  .branch-stage.compact .info-card {
+    min-height: 8rem;
+    padding: clamp(0.7rem, 1.2vw, 0.95rem);
+  }
+
+  .branch-stage.compact h3 {
+    font-size: clamp(0.95rem, 1.5vw, 1.45rem);
+    margin: 0 0 0.55rem;
+  }
+
+  .branch-stage.compact p {
+    font-size: clamp(0.78rem, 1.05vw, 1rem);
   }
 
   @keyframes branch-ring-spin {

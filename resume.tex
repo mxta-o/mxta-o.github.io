@@ -107,11 +107,6 @@
 \begin{document}
 
 %----------HEADING----------
-% \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
-%   \textbf{\href{http://sourabhbajaj.com/}{\Large Sourabh Bajaj}} & Email : \href{mailto:sourabh@sourabhbajaj.com}{sourabh@sourabhbajaj.com}\\
-%   \href{http://sourabhbajaj.com/}{http://www.sourabhbajaj.com} & Mobile : +1-123-456-7890 \\
-% \end{tabular*}
-
 \begin{center}
     \textbf{\huge \scshape Jaelan Cruz} \\ \vspace{1pt}
     \href{mailto:jaelancruz@yahoo.com}{\underline{jaelancruz@yahoo.com}} $|$ 
@@ -120,17 +115,12 @@
     \href{https://mxta-o.github.io}{\underline{Portfolio}}
 \end{center}
 
-%-----------SUMMARY-----------
-\section{Summary}
-\small{Full-Stack Engineer and Computer Science student focused on building reliable \textbf{high-performance interactive} systems with emphasis on \textbf{scalability} and \textbf{maintainability}.}
-
-
 %-----------EDUCATION-----------
 \section{Education}
   \resumeSubHeadingListStart
     \resumeSubheading
-      {York University}{Markham, ON}
-      {Bachelor of Applied Science -- CSSD}{Expected Apr. 2028}
+      {Computer Science for Software Development}{Markham, ON}
+      {York University - BASc}{Expected Apr. 2028}
       \resumeItemListStart
         \resumeItem{\textbf{Relevant Coursework:} Data Structures \& Algorithms, User Interfaces, Software Design, Object-Oriented Programming, Intro to Cloud.}
       \resumeItemListEnd
@@ -145,7 +135,7 @@
       {Fullstack Engineer}{Dec 2025 -- Present}
       {Circe -- Contract Part-Time}{}
       \resumeItemListStart
-        \resumeItem{Collaborated with \textbf{6+ contributors} on a production \textbf{React Native app}, resolving merge conflicts and maintaining code quality.}
+        \resumeItem{Engineered the \textbf{Media Pool} feature in the \textbf{React Native} app---responsive grid, selection/starring UX, and upload/ingest + delete/unlink flows---spanning \textbf{7 core components/hooks} across \textbf{46 files} touched over \textbf{70 commits}.}
         \resumeItem{Built and hardened a \textbf{REST API} with \textbf{FastAPI} and \textbf{PostgreSQL} for secure, scalable user profile management, resulting in reliable authentication and \textbf{robust data protection}.}
         \resumeItem{Coupled client-side software to internal systems via \textbf{TypeScript API client} and custom \textbf{React hooks}, handling loading, error, and update states, which improved real-time data accuracy and \textbf{user experience}.}
         \resumeItem{Engineered \textbf{5 authentication flows} (sign-in, sign-up, confirmation, password reset, forgot password) with robust validation and real-time error messaging, enhancing \textbf{account security} and reducing \textbf{user errors}.}
@@ -157,8 +147,8 @@
 %-----------PROJECTS-----------
 \section{Projects}
     \resumeSubHeadingListStart
-      \resumeProjectHeading
-          {\textbf{Interactive 3D Portfolio Experience} $|$ \emph{Astro, Svelte, Three.js, GSAP, TailwindCSS}}{}
+        \resumeProjectHeading
+          {\href{https://github.com/mxta-o/mxta-o.github.io}{\textbf{Interactive 3D Portfolio Experience}} $|$ \emph{Astro, Svelte, Three.js, GSAP, TailwindCSS}}{}
           \resumeItemListStart
             \resumeItem{Engineered a \textbf{modular, checkpoint‑driven} 3D portfolio with reusable scene systems; galaxy renders \textbf{25,000+ particles} and a \textbf{1,800‑star} field using a single merged \textbf{Points} buffer.}
             \resumeItem{Built \textbf{GSAP} timelines and an \textbf{AudioManager} to synchronize animations and SFX across \textbf{six checkpoint} sections for smooth, \textbf{scroll‑driven} guided interactions.}
@@ -166,23 +156,30 @@
             \resumeItem{Automated builds and deployments using \textbf{GitHub Actions} (\textbf{build → artifact → deploy}) for repeatable production releases.}
           \resumeItemListEnd
 
-      \resumeProjectHeading
-          {\textbf{jamSpace} $|$ \emph{Python, Flask, HTML, CSS, JavaScript}}{}
+        \resumeProjectHeading
+          {\href{https://github.com/mxta-o/jamSpace}{\textbf{jamSpace}} $|$ \emph{Python, Flask, HTML, CSS, JavaScript}}{}
           \resumeItemListStart
-            \resumeItem{Developed a full-stack productivity web application using \textbf{Flask} and modular \textbf{Blueprint architecture} for \textbf{scalable route management}.}
-            \resumeItem{Removed \textbf{5+ obsolete files} and reduced codebase clutter by \textbf{1,000+ lines} via systematic cleanup.}
-            \resumeItem{Enhanced \textbf{UI/UX} with custom CSS/JavaScript for \textbf{responsive design}, modals, and advanced animations.}
+            \resumeItem{Built a \textbf{Flask} productivity suite with \textbf{5 integrated apps} (Pomodoro, Habit Tracker, Focus Logger, Time Blocks, Time Capsule) across \textbf{2 Blueprints} and \textbf{22 routes}, with a shared base template for consistent UX.}
+            \resumeItem{Implemented a time-block planner with \textbf{monthly/weekly views}, recurring block expansion, and \textbf{AJAX-driven} navigation, generating a \textbf{42-day} calendar grid with modal-based CRUD and category-styled completion toggles.}
+            \resumeItem{Engineered \textbf{JSON-backed CRUD} flows across 4 apps with client-side \textbf{Pomodoro} stats, session streak tracking, speech-synthesis alerts, and date-based readiness states.}
           \resumeItemListEnd
 
-      \resumeProjectHeading
-          {\textbf{PixelCraft} $|$ \emph{Java, Bash, OOP, CLI, HTML, CSS}}{}
+        \resumeProjectHeading
+          {\href{https://github.com/mxta-o/exposr}{\textbf{exposr}} $|$ \emph{React, Node, JavaScript, Python, PostgreSQL, Supabase}}{}
           \resumeItemListStart
-            \resumeItem{Developed an image processing tool supporting batch transformations with \textbf{8+ filters}, processing \textbf{1,000+ images} in testing.}
-            \resumeItem{Designed extensible \textbf{OOP} architecture using \textbf{Java Reflection} for dynamic filter selection and rapid addition of new effects.}
-            \resumeItem{Implemented a \textbf{command-line interface} and \textbf{10+ Bash scripts} for flexible usage and \textbf{100\% automated batch workflows}.}
-            \resumeItem{Processed \textbf{PNG images} and automated file management for efficient, large-scale operations.}
+            \resumeItem{Built a full-stack photo app with a \textbf{weekly reveal} system, as measured by scheduled drops and \textbf{60s} job polling, by implementing \textbf{Express} APIs and Supabase-backed reveal scheduling.}
+            \resumeItem{Implemented a secure upload pipeline, as measured by \textbf{10MB} size caps and a \textbf{5-minute} EXIF freshness window, by integrating \textbf{Multer}, \textbf{exifr}, and \textbf{JWT} auth.}
+            \resumeItem{Developed a \textbf{Python} image processor, as measured by standardized \textbf{600x600} outputs with grain/light-leak/vignette effects, by composing \textbf{Pillow+NumPy} filters and server-side transforms.}
           \resumeItemListEnd
 
+        \resumeProjectHeading
+          {\href{https://github.com/mxta-o/lsw-online}{\textbf{Legends of Sword and Wand}} $|$ \emph{Java, Spring Boot, Maven, Docker, GitHub Actions}}{}
+          \resumeItemListStart
+            \resumeItem{Architected an \textbf{8-module} Spring Boot monorepo with \textbf{6 independently deployable services} and a shared core, using Maven multi-module build and centralized dependency management.}
+            \resumeItem{Authored a \textbf{GitHub Actions} CI/CD pipeline with unit tests, Docker Compose smoke tests, and a \textbf{6-service} Buildx image matrix for fully automated publishing.}
+            \resumeItem{Containerized the full stack with per-service \textbf{Dockerfiles} and a top-level \textbf{Docker Compose} config, enabling one-command local integration bring-up.}
+          \resumeItemListEnd
+          
     \resumeSubHeadingListEnd
 
 
@@ -192,10 +189,10 @@
  \begin{itemize}[leftmargin=0.15in, label={}]
     \item
   \textbf{Programming Languages}{: Java, Python, C, C++, SQL, JavaScript, TypeScript, HTML5, CSS, Bash} \\
-  \textbf{Libraries \& Frameworks}{: React, FastAPI, Astro, Svelte, Three.js, GSAP, WebGL, Flask, TailwindCSS, Formik, Yup, Jinja2} \\
+  \textbf{Libraries \& Frameworks}{: React, FastAPI, Astro, Svelte, Three.js, GSAP, WebGL, Flask, TailwindCSS, Express} \\
   \textbf{Databases}{: PostgreSQL, SQLite} \\
-  \textbf{Tools \& Platforms}{: Git, GitHub, AWS, Docker, VS Code, Linux, GitHub Actions, Jest, pytest, Maven, Expo, CMake} \\
-  \textbf{AI \& Automation}{: GPT-5 mini, Claude Sonnet 4.6, GPT-5.3 Codex, Copilot}
+  \textbf{Tools \& Platforms}{: Git, GitHub, AWS, Docker, VS Code, Linux, GitHub Actions, Jest, Maven, Expo, Supabase} \\
+  \textbf{AI \& Automation}{: Claude Sonnet, Copilot}
  \end{itemize}
 
 
