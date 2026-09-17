@@ -1,6 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import type { UIAnchor } from './types';
+  import { isMobile } from './isMobile';
+  import { scrollSettling } from './scrollMotion';
+  import { requestLinkOpen } from './LinkConfirm.svelte';
 
   export let active = false;
   export let progress = 0;
@@ -60,6 +63,15 @@
   const clearProgressTimers = () => {
     progressTimers.forEach((t) => clearTimeout(t));
     progressTimers = [];
+  };
+
+  // Desktop keeps plain anchor behavior. On touch, a tap while the view is still
+  // moving is treated as "stop scrolling"; anything else asks before navigating.
+  const handleTitleClick = (event: MouseEvent, label: string, href: string) => {
+    if (!$isMobile) return;
+    event.preventDefault();
+    if ($scrollSettling) return;
+    requestLinkOpen(label, href);
   };
 
   const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
@@ -384,7 +396,13 @@
       {#if leftTitle}
         <h3>
           {#if leftHref}
-            <a class="title-link" href={leftHref} target="_blank" rel="noopener noreferrer">
+            <a
+              class="title-link"
+              href={leftHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              on:click={(event) => handleTitleClick(event, leftTitle, leftHref)}
+            >
               <span>{leftTitle}</span>
               <svg class="repo-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
                 <path fill="currentColor" d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.41 7.86 10.94.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.3-1.69-1.3-1.69-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.78 2.73 1.27 3.4.97.11-.76.41-1.27.75-1.56-2.55-.29-5.24-1.28-5.24-5.72 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18.92-.26 1.9-.39 2.88-.39.98 0 1.96.13 2.88.39 2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.45-2.69 5.43-5.25 5.71.42.36.8 1.08.8 2.18 0 1.57-.01 2.84-.01 3.23 0 .31.21.68.8.56C20.71 21.41 24 17.09 24 12c0-6.35-5.15-11.5-12-11.5z" />
@@ -439,7 +457,13 @@
       {#if rightTitle}
         <h3>
           {#if rightHref}
-            <a class="title-link" href={rightHref} target="_blank" rel="noopener noreferrer">
+            <a
+              class="title-link"
+              href={rightHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              on:click={(event) => handleTitleClick(event, rightTitle, rightHref)}
+            >
               <span>{rightTitle}</span>
               <svg class="repo-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
                 <path fill="currentColor" d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.41 7.86 10.94.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.3-1.69-1.3-1.69-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.78 2.73 1.27 3.4.97.11-.76.41-1.27.75-1.56-2.55-.29-5.24-1.28-5.24-5.72 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18.92-.26 1.9-.39 2.88-.39.98 0 1.96.13 2.88.39 2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.45-2.69 5.43-5.25 5.71.42.36.8 1.08.8 2.18 0 1.57-.01 2.84-.01 3.23 0 .31.21.68.8.56C20.71 21.41 24 17.09 24 12c0-6.35-5.15-11.5-12-11.5z" />

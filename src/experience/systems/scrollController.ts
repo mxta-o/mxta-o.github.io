@@ -7,6 +7,7 @@ const VELOCITY_EPSILON = 0.0004;
 // Movement below this is treated as a tap so links inside cards stay clickable.
 const DRAG_SLOP = 6;
 const FLICK_IDLE_MS = 90;
+const SETTLE_EPSILON = 0.0006;
 
 export class ScrollController {
   private targetProgress = 0;
@@ -57,6 +58,14 @@ export class ScrollController {
 
   private readonly touchStartHandler = (event: TouchEvent) => {
     if (event.touches.length !== 1) {
+      this.touchActive = false;
+      this.touchId = null;
+      return;
+    }
+
+    // Overlays such as the link confirmation dialog handle their own gestures.
+    const target = event.target;
+    if (target instanceof Element && target.closest('[data-scroll-exempt]')) {
       this.touchActive = false;
       this.touchId = null;
       return;
@@ -173,6 +182,15 @@ export class ScrollController {
     if (snapCurrent) {
       this.currentProgress = clamped;
     }
+  }
+
+  // True while the view is still coasting or easing toward its target, i.e. a tap
+  // right now is most likely the user trying to stop the scroll.
+  get isSettling() {
+    return (
+      Math.abs(this.velocity) > VELOCITY_EPSILON ||
+      Math.abs(this.targetProgress - this.currentProgress) > SETTLE_EPSILON
+    );
   }
 
   get target() {

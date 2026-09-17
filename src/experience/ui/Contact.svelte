@@ -2,6 +2,9 @@
   import { onDestroy } from 'svelte';
   import BranchCards from './BranchCards.svelte';
   import type { UIAnchor } from './types';
+  import { isMobile } from './isMobile';
+  import { scrollSettling } from './scrollMotion';
+  import { requestLinkOpen } from './LinkConfirm.svelte';
 
   export let active = false;
   export let progress = 0;
@@ -54,6 +57,7 @@
   });
 
   const handleCopyDiscord = async () => {
+    if ($isMobile && $scrollSettling) return;
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       try {
         await navigator.clipboard.writeText(urls.discord);
@@ -66,8 +70,14 @@
     }
   };
 
-  const handleConnectClick = (href: string, newTab = true) => {
+  const handleConnectClick = (href: string, newTab = true, label = '') => {
     if (typeof window === 'undefined') return;
+
+    if ($isMobile) {
+      if ($scrollSettling) return;
+      requestLinkOpen(label, href, newTab);
+      return;
+    }
 
     if (href.startsWith('mailto:')) {
       window.location.href = href;
@@ -106,7 +116,10 @@
       <button
         class="contact-pill"
         type="button"
-        on:click={() => (link.clipboard ? handleCopyDiscord() : handleConnectClick(link.href, link.newTab ?? true))}
+        on:click={() =>
+          link.clipboard
+            ? handleCopyDiscord()
+            : handleConnectClick(link.href, link.newTab ?? true, link.label)}
       >
         {link.label}
       </button>

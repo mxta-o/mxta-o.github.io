@@ -20,6 +20,8 @@
   import Projects from './ui/Projects.svelte';
   import Vision from './ui/Vision.svelte';
   import Contact from './ui/Contact.svelte';
+  import LinkConfirm from './ui/LinkConfirm.svelte';
+  import { scrollSettling } from './ui/scrollMotion';
   import { HIDDEN_ANCHOR, type UIAnchor } from './ui/types';
   import { AudioManager } from '../lib/audio';
 
@@ -426,12 +428,18 @@
 
     let rafId = 0;
     let lastTime = performance.now();
+    let lastSettling = false;
 
     const tick = (time: number) => {
       const deltaSeconds = Math.min((time - lastTime) / 1000, 0.033);
       lastTime = time;
 
       scroll.update(deltaSeconds);
+
+      if (scroll.isSettling !== lastSettling) {
+        lastSettling = scroll.isSettling;
+        scrollSettling.set(lastSettling);
+      }
 
       checkpoints.update(scroll.progress, (current, previous) => {
         activeSection = current;
@@ -876,6 +884,8 @@
   </div>
 
   <div class="intro-mask" style={`opacity:${introMaskOpacity}`}></div>
+
+  <LinkConfirm />
 </div>
 
 <style>
