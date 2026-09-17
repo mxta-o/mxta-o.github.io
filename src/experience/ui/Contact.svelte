@@ -92,7 +92,7 @@
   leftLines={[
     'Languages: Java, Python, C, C++, JavaScript, TypeScript, SQL, HTML5, CSS, Bash',
     'Frameworks: React, FastAPI, Astro, Svelte, Three.js, Flask, TailwindCSS, OpenGL, WebGL, GSAP, Expo',
-    'Tools: PostgreSQL, SQLite, AWS, Docker, GitHub Actions, Linux, CMake, Maven, JUnit, Jest'
+    'Tools: PostgreSQL, AWS, Docker, Linux, Maven, JUnit.. more on my github :)'
   ]}
   rightTitle="Connect"
   rightLines={[]}

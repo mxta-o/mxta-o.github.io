@@ -4,7 +4,7 @@ import svelte from '@astrojs/svelte';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://mxta-o.github.io',
+  site: 'https://jaelancruz.dev',
   integrations: [
     tailwind(),
     svelte()

@@ -19,14 +19,15 @@
   {materialized}
   leftTitle="Overview"
   leftLines={[
-    "Based in Toronto, I'm a second year university student majoring in computer science.",
-    "I specialize in full-stack development, with current practice and scope focused on cloud-native architecture and AWS.",
-    "Fueled by my love for code and caffeine, I build, break, and debug modern apps.. sometimes all in one sitting.."
+    "I'm a third year student studying computer science @YorkU in Toronto ᕙ(  •̀ ᗜ •́  )ᕗ ",
+    "mainly experienced in full-stack dev, but I'm currently expanding towards different domains.",
+    "outside of SWE, i wind down by tending to my hobbies, whether its gymming, gaming, or playing piano",
+    "that also includes listening to a loooot.. of music, and playing with my dog ( ᐛ )و"
   ]}
   rightTitle="Technical Mastery"
   rightProgress={[
-    { label: 'Frontend Mastery', value: 82 },
-    { label: 'Backend Mastery', value: 67 },
+    { label: 'Frontend Mastery', value: 75 },
+    { label: 'Backend Mastery', value: 78 },
     { label: 'Caffeine Consumption', value: 98 }
   ]}
   leftStyle={ABOUT_LEFT_STYLE}

@@ -27,17 +27,16 @@
   headerFloatAmplitude={2.6}
   leftTitle="See this portfolio's repo here :)"
   leftLines={[
-    '✓ Modular checkpoint-driven 3D experience with reusable scene systems.',
-    '✓ Galaxy renders 25,000+ particles plus a 1,800-star field in one buffer.',
-    '✓ GSAP timelines and AudioManager sync animations and SFX across six checkpoints.',
-    '✓ Optimized runtime with chunked buffer updates and depth-based tuning.'
+    '✓ An interactive 3D portfolio you scroll through like a little universe.',
+    '✓ Animated transitions and sound effects guide you between sections.'
   ]}
+  leftTags={['Three.js', 'Svelte', 'Astro', 'GSAP']}
   rightTitle="jamSpace"
   rightLines={[
-    '✓ Flask productivity suite with five integrated apps across two blueprints.',
-    '✓ Time-block planner with monthly/weekly views and AJAX navigation.',
-    '✓ JSON-backed CRUD with Pomodoro stats, streak tracking, and speech alerts.'
+    '✓ An all-in-one productivity app — planner, to-do list, and focus timer in one place.',
+    '✓ Drag-and-drop weekly calendar with built-in Pomodoro tracking and voice alerts.'
   ]}
+  rightTags={['Flask', 'JavaScript', 'JSON storage']}
   leftHref="https://github.com/mxta-o/mxta-o.github.io"
   rightHref="https://github.com/mxta-o/jamSpace"
   leftStyle={PROJECTS_LEFT_STYLE}
@@ -55,16 +54,16 @@
   compact
   leftTitle="exposr"
   leftLines={[
-    '✓ Full-stack photo app with weekly reveal scheduling and polling.',
-    '✓ Secure upload pipeline with size caps, EXIF freshness, and JWT auth.',
-    '✓ Python image processor for 600x600 grain/light-leak/vignette effects.'
+    '✓ A private photo-sharing app where new pictures unlock once a week.',
+    '✓ Automatic film-style effects, plus secure, protected uploads.'
   ]}
+  leftTags={['Python', 'JWT Auth', 'REST API']}
   rightTitle="Legends of Sword and Wand"
   rightLines={[
-    '✓ 8-module Spring Boot monorepo with six deployable services.',
-    '✓ CI/CD with unit and Docker Compose smoke tests plus Buildx matrix.',
-    '✓ Containerized stack with per-service Dockerfiles and top-level Compose.'
+    '✓ A fantasy game platform built from several connected backend services.',
+    '✓ Automatically tested and containerized for reliable deployment.'
   ]}
+  rightTags={['Spring Boot', 'Docker', 'CI/CD']}
   leftHref="https://github.com/mxta-o/exposr"
   rightHref="https://github.com/mxta-o/lsw-online"
   leftStyle={PROJECTS_LEFT_STYLE_2}

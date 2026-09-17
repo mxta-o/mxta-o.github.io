@@ -6,7 +6,23 @@ interface Props {
 
 import EnterOverlay from '../experience/ui/EnterOverlay.svelte';
 
-const { title, description = "Software Engineering Student | Full-Stack Developer" } = Astro.props;
+const { title, description = "Jaelan Cruz is a software engineer and full-stack developer. Explore my portfolio, projects, and resume." } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL('/omopfp.jpg', Astro.site);
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Jaelan Cruz',
+  url: Astro.site?.toString(),
+  image: ogImageURL.toString(),
+  jobTitle: 'Software Engineer',
+  sameAs: [
+    'https://linkedin.com/in/jaelan-cruz/',
+    'https://github.com/mxta-o'
+  ]
+};
 ---
 
 <!doctype html>
@@ -16,8 +32,23 @@ const { title, description = "Software Engineering Student | Full-Stack Develope
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/jpeg" href="/omopfp.jpg" />
+    <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:site_name" content="Jaelan Cruz" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
   </head>
   <body class="bg-black text-white antialiased">
     <slot />

@@ -25,19 +25,19 @@
   headerFloatAmplitude={4}
   leftTitle="Fullstack Engineer @ Circe"
   leftLines={[
-    'Contract Part-Time · Dec 2025 to Present',
-    '• Collaborated with 6 plus contributors on a production-grade React Native app.',
-    '• Built and hardened profile and preferences APIs with FastAPI and PostgreSQL.',
-    '• Implemented 5 login and sign-up flows with realtime validation and error handling.',
-    '• Refactored user-facing features across 15+ files to improve maintainability.'
+    'Internship · Dec 2025 to Jul 2026',
+    '• Developed and shipped production-ready frontend features using React and TypeScript, enhancing usability and performance.',
+    '• Collaborated with engineers and product stakeholders to transform product concepts into polished user experiences.',
+    '• Resolved user authentication issues related to AWS Cognito, ensuring a seamless user experience.',
+    '• Integrated RESTful services with Python (FastAPI) and PostgreSQL to support user profile workflows.'
   ]}
   rightTitle="Trajectory"
   rightLines={[
     'Current focus:',
-    '• skill refinery in AWS and cloud development',
-    '• more backend heavy projects',
-    '• transforming unstable flows into maintainable systems',
-    'More work coming soon.. (hopefully)'
+    '• skill refinery in backend and cloud dev',
+    '• challenging projects',
+    '• exploring other domains of software engineering',
+    'More work coming soon.. (hopefully T_T)'
   ]}
   leftStyle={EXPERIENCE_LEFT_STYLE}
   rightStyle={EXPERIENCE_RIGHT_STYLE}

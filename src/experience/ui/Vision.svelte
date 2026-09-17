@@ -33,10 +33,11 @@
   style:visibility={overlayVisibility}
   style:transform={overlayTransform}
 >
-  <h1>My Vision</h1>
+  <h2>My Vision</h2>
   <div class="subtitles">
     <p class="subtitle">i don't just write code.</p>
-    <p class="subtitle">i orchestrate systems that scale beyond me.</p>
+    <p class="subtitle">i pick things apart until i understand why they scale.</p>
+    <p class="text">still deciding which pile of things to pick apart forever lol..</p>
   </div>
 </section>
 
@@ -53,7 +54,7 @@
     transition: opacity 220ms ease;
   }
 
-  h1 {
+  h2 {
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 500;
     font-size: clamp(2.1rem, 7.1vw, 5.2rem);
@@ -71,6 +72,10 @@
     opacity: 0;
     transform: translateY(6px);
     transition: opacity 420ms cubic-bezier(.2,.9,.3,1), transform 420ms cubic-bezier(.2,.9,.3,1);
+  }
+
+  .text {
+    color: rgba(226, 236, 255, 0.5);
   }
 
   .vision-overlay.active .subtitle {

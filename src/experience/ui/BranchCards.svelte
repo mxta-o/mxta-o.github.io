@@ -16,6 +16,8 @@
   export let headerLines: string[] = [];
   export let leftHref: string = '';
   export let rightHref: string = '';
+  export let leftTags: string[] = [];
+  export let rightTags: string[] = [];
   export let rightProgress: { label: string; value: number }[] = [];
   export let leftStyle = '';
   export let rightStyle = '';
@@ -403,6 +405,13 @@
           {/if}
         {/each}
       </div>
+      {#if leftTags.length > 0}
+        <div class="tag-row">
+          {#each leftTags as tag}
+            <span class="tag">{tag}</span>
+          {/each}
+        </div>
+      {/if}
     </article>
   {/if}
 
@@ -468,6 +477,13 @@
           </div>
         </slot>
       {/if}
+      {#if rightTags.length > 0}
+        <div class="tag-row">
+          {#each rightTags as tag}
+            <span class="tag">{tag}</span>
+          {/each}
+        </div>
+      {/if}
     </article>
   {/if}
 
@@ -513,7 +529,7 @@
   .branch-stage {
     position: absolute;
     inset: 0;
-    pointer-events: auto;
+    pointer-events: none;
     transition: opacity 320ms ease, filter 320ms ease, transform 320ms ease;
     z-index: 50;
   }
@@ -688,6 +704,25 @@
     text-wrap: pretty;
   }
 
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.65rem;
+  }
+
+  .tag {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(0.68rem, 0.9vw, 0.78rem);
+    letter-spacing: 0.01em;
+    padding: 0.22rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid rgba(223, 235, 255, 0.32);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(224, 236, 255, 0.72);
+    white-space: nowrap;
+  }
+
   @media (max-width: 900px) {
     .wire {
       stroke-width: 1.1;
@@ -716,6 +751,11 @@
 
   .branch-stage.compact p {
     font-size: clamp(0.78rem, 1.05vw, 1rem);
+  }
+
+  .branch-stage.compact .tag {
+    font-size: clamp(0.62rem, 0.85vw, 0.72rem);
+    padding: 0.18rem 0.52rem;
   }
 
   @keyframes branch-ring-spin {
