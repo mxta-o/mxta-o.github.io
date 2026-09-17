@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import BranchCards from './BranchCards.svelte';
   import type { UIAnchor } from './types';
 
@@ -6,6 +7,23 @@
   export let progress = 0;
   export let anchor: UIAnchor;
   export let materialized = false;
+
+  // Four cards can't fit one phone screen, so mobile shows them two at a time.
+  // 0.46 splits the parent's [0.1, 0.82] content window into equal halves.
+  const PAGE_SPLIT = 0.46;
+
+  let isMobile = false;
+
+  onMount(() => {
+    const query = window.matchMedia('(max-width: 900px)');
+    const sync = () => (isMobile = query.matches);
+    sync();
+    query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync);
+  });
+
+  $: pageOneActive = active && (!isMobile || progress < PAGE_SPLIT);
+  $: pageTwoActive = active && (!isMobile || progress >= PAGE_SPLIT);
 
   // Position controls: tweak these constants to move the header and body cards.
   const PROJECTS_HEADER_STYLE = 'right: clamp(4rem, 10vw, 6rem); top: clamp(6rem, 8vh, 7rem);';
@@ -16,10 +34,11 @@
 </script>
 
 <BranchCards
-  {active}
+  active={pageOneActive}
   {progress}
   {anchor}
   {materialized}
+  showAnchor={!isMobile}
   compact
   headerTitle="Projects"
   headerStyle={PROJECTS_HEADER_STYLE}
@@ -46,7 +65,7 @@
 />
 
 <BranchCards
-  {active}
+  active={pageTwoActive}
   {progress}
   {anchor}
   {materialized}

@@ -394,17 +394,20 @@
       return 0.04;
     };
 
-    const onPointerMove = (event: MouseEvent) => {
+    const onPointerMove = (event: PointerEvent) => {
+      if (event.pointerType === 'touch') return;
       if (!lookActive) return;
       pointerTarget.x = (event.clientX / window.innerWidth - 0.5) * 2;
       pointerTarget.y = (event.clientY / window.innerHeight - 0.5) * -2;
     };
 
     const onPointerDown = (event: PointerEvent) => {
-      if (event.button !== 0) return;
-      lookActive = true;
       // Retry ambience start on first interactions in case autoplay was blocked.
       AudioManager.playAmbience();
+      // Touch drags drive scroll progress, not camera look.
+      if (event.pointerType === 'touch') return;
+      if (event.button !== 0) return;
+      lookActive = true;
     };
 
     const onPointerUp = () => {
@@ -881,8 +884,15 @@
     inset: 0;
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
     background: radial-gradient(circle at 50% 45%, #0a1030 0%, #02030a 55%, #000 100%);
     overflow: hidden;
+    touch-action: none;
+    overscroll-behavior: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .experience-canvas {
@@ -890,6 +900,7 @@
     height: 100%;
     display: block;
     cursor: grab;
+    touch-action: none;
   }
 
   .experience-canvas.look-active {
@@ -901,6 +912,7 @@
     inset: 0;
     pointer-events: auto;
     z-index: 30;
+    touch-action: none;
   }
 
   .control-layer {
@@ -908,6 +920,7 @@
     inset: 0;
     pointer-events: none;
     z-index: 80;
+    touch-action: none;
   }
 
   .top-nav {

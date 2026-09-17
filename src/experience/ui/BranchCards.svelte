@@ -599,6 +599,7 @@
     pointer-events: auto;
     transition: opacity 260ms ease, transform 300ms ease;
     z-index: 8;
+    touch-action: none;
   }
 
   .title-link {
@@ -724,15 +725,34 @@
   }
 
   @media (max-width: 900px) {
-    .wire {
-      stroke-width: 1.1;
+    .branch-stage {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: clamp(0.75rem, 2.4vh, 1.25rem);
+      padding: clamp(4.5rem, 12vh, 6rem) clamp(0.8rem, 4vw, 1.2rem) clamp(2rem, 6vh, 3rem);
+      box-sizing: border-box;
+    }
+
+    /* Anchor-core has no left/top of its own, so flex centering would displace it. */
+    .wire-layer,
+    .anchor-core {
+      display: none !important;
     }
 
     .info-card {
-      width: min(90vw, 35rem) !important;
-      left: clamp(0.8rem, 4vw, 1.2rem) !important;
+      position: static !important;
+      top: auto !important;
+      left: auto !important;
       right: auto !important;
+      bottom: auto !important;
+      width: 100% !important;
+      max-width: 35rem;
+      min-height: 0 !important;
+      flex: 0 0 auto;
     }
+
     .header-card {
       display: none !important;
       pointer-events: none !important;
