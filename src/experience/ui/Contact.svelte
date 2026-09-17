@@ -63,10 +63,10 @@
         await navigator.clipboard.writeText(urls.discord);
         showTempToast(`Copied ${urls.discord} to clipboard`);
       } catch (e) {
-        showTempToast('Copy failed — select and copy manually');
+        showTempToast('Copy failed — select and copy manually: ' + urls.discord);
       }
     } else {
-      showTempToast('Copy not supported in this browser');
+      showTempToast('Copy not supported in this browser. you can add manually: ' + urls.discord);
     }
   };
 
