@@ -9,7 +9,7 @@ import EnterOverlay from '../experience/ui/EnterOverlay.svelte';
 const { title, description = "Jaelan Cruz is a software engineer and full-stack developer. Explore my portfolio, projects, and resume." } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const ogImageURL = new URL('/omopfp.jpg', Astro.site);
+const ogImageURL = new URL('/favicon.svg', Astro.site);
 
 const personSchema = {
   '@context': 'https://schema.org',
@@ -31,7 +31,7 @@ const personSchema = {
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <link rel="icon" type="image/jpeg" href="/omopfp.jpg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
