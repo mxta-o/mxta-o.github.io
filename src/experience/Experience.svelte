@@ -777,8 +777,8 @@
           </div>
           <div class="update-notes">
             <p>mobile support!</p>
-            <p>this little update button too</p>
-            <p>minor style changes in vision section</p>
+            <p>added this update section ur reading rn lol</p>
+            <p>updated favicon and image embeds</p>
           </div>
         </section>
       {/if}
