@@ -75,7 +75,11 @@
   }
 
   .text {
-    color: rgba(226, 236, 255, 0.5);
+    color: rgba(226, 236, 255, 0.42);
+    text-transform: lowercase;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 420ms cubic-bezier(.2,.9,.3,1), transform 420ms cubic-bezier(.2,.9,.3,1);
   }
 
   .vision-overlay.active .subtitle {
@@ -83,9 +87,15 @@
     transform: translateY(0);
   }
 
+  .vision-overlay.active .text {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   /* stagger lines */
   .subtitles .subtitle:nth-child(1) { transition-delay: 140ms; }
-  .subtitles .subtitle:nth-child(2) { transition-delay: 300ms; }
+  .subtitles .subtitle:nth-child(2) { transition-delay: 400ms; }
+  .text { transition-delay: 750ms; }
 
   @media (prefers-reduced-motion: reduce) {
     .subtitle { transition: none !important; transform: none !important; }
