@@ -59,6 +59,7 @@
   let lookActive = false;
   let showDebugHud = false;
   let showSettings = false;
+  let showUpdates = false;
   const AUDIO_ASSETS = {
     ambience: '/audio/ambience.mp3',
     cardRender: '/audio/card-render.mp3'
@@ -737,9 +738,49 @@
         {/each}
       </nav>
 
-      <button class="settings-trigger" type="button" on:click={() => (showSettings = !showSettings)}>
-        settings
-      </button>
+      <div class="corner-actions">
+        <button
+          class="corner-trigger updates-trigger"
+          type="button"
+          aria-expanded={showUpdates}
+          on:click={() => {
+            showUpdates = !showUpdates;
+            showSettings = false;
+          }}
+        >
+          last updated: 09/18/26
+        </button>
+        <button
+          class="corner-trigger"
+          type="button"
+          aria-expanded={showSettings}
+          on:click={() => {
+            showSettings = !showSettings;
+            showUpdates = false;
+          }}
+        >
+          settings
+        </button>
+      </div>
+
+      {#if showUpdates}
+        <section
+          class="settings-modal"
+          role="dialog"
+          aria-label="Latest Update"
+          in:fade={{ duration: 180 }}
+          out:fade={{ duration: 180 }}
+        >
+          <div class="settings-head">
+            <h2>latest updates</h2>
+            <button type="button" class="close-btn" on:click={() => (showUpdates = false)}>x</button>
+          </div>
+          <div class="update-notes">
+            <p>mobile support!</p>
+            <p>confirmation before opening links on mobile</p>
+          </div>
+        </section>
+      {/if}
 
       {#if showSettings}
         <section
@@ -961,10 +1002,17 @@
     border-color: rgba(230, 240, 255, 0.55);
   }
 
-  .settings-trigger {
+  .corner-actions {
     position: absolute;
     right: 1.05rem;
     bottom: 0.82rem;
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    pointer-events: auto;
+  }
+
+  .corner-trigger {
     border: 0;
     background: transparent;
     color: rgba(224, 232, 246, 0.74);
@@ -972,7 +1020,24 @@
     letter-spacing: -0.01em;
     border-bottom: 1px solid rgba(223, 236, 255, 0.18);
     cursor: pointer;
-    pointer-events: auto;
+    touch-action: manipulation;
+  }
+
+  .updates-trigger {
+    font-size: 0.8rem;
+    color: rgba(224, 232, 246, 0.38);
+    border-bottom-color: rgba(223, 236, 255, 0.1);
+  }
+
+  .update-notes {
+    display: grid;
+    gap: 0.35rem;
+    color: rgba(224, 236, 255, 0.88);
+    font: 400 0.9rem/1.3 'Space Grotesk', sans-serif;
+  }
+
+  .update-notes p {
+    margin: 0;
   }
 
   .settings-modal {
