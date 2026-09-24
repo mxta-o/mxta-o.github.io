@@ -11,7 +11,7 @@ export default defineConfig({
   ],
   vite: {
     ssr: {
-      noExternal: ['three', '@threlte/core', '@threlte/extras']
+      noExternal: ['three']
     }
   }
 });
