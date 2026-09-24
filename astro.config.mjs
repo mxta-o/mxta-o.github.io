@@ -1,15 +1,15 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
 import svelte from '@astrojs/svelte';
+import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://jaelancruz.dev',
   integrations: [
-    tailwind(),
     svelte()
   ],
   vite: {
+    plugins: [tailwindcss()],
     ssr: {
       noExternal: ['three']
     }
