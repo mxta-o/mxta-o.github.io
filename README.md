@@ -33,6 +33,7 @@ npm run preview
 - Interactive 3D shapes and animations
 - Smooth scroll animations
 - Responsive design
+- STREAKS IN CASE I FORGET TO DO IT TONIGHT
 
 ## License
 
