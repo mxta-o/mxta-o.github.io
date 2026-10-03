@@ -22,6 +22,13 @@
   export let leftTags: string[] = [];
   export let rightTags: string[] = [];
   export let rightProgress: { label: string; value: number }[] = [];
+  export let thirdTitle = '';
+  export let thirdLines: string[] = [];
+  export let thirdTags: string[] = [];
+  export let thirdStyle = '';
+  export let thirdWidth = 'clamp(20rem, 34vw, 38rem)';
+  export let thirdFloatAmplitude = 5;
+  export let thirdFloatPhaseOffset = 3.2;
   export let leftStyle = '';
   export let rightStyle = '';
   export let headerStyle = '';
@@ -41,15 +48,18 @@
   let leftCard: HTMLElement | null = null;
   let rightCard: HTMLElement | null = null;
   let headerCard: HTMLElement | null = null;
+  let thirdCard: HTMLElement | null = null;
 
   let trunkPath = '';
   let leftPath = '';
   let rightPath = '';
   let headerPath = '';
+  let thirdPath = '';
   let trunkLength = 1;
   let leftLength = 1;
   let rightLength = 1;
   let headerLength = 1;
+  let thirdLength = 1;
   let viewportWidth = 1;
   let viewportHeight = 1;
   let animationTime = 0;
@@ -111,7 +121,14 @@
       rightPort = getCardPort(rightCard.getBoundingClientRect(), source);
     }
 
-    const branchPorts = [leftPort, rightPort].filter((port): port is { x: number; y: number } => Boolean(port));
+    let thirdPort: { x: number; y: number } | null = null;
+
+    if (hasThirdCard) {
+      if (!thirdCard) return;
+      thirdPort = getCardPort(thirdCard.getBoundingClientRect(), source);
+    }
+
+    const branchPorts = [leftPort, rightPort, thirdPort].filter((port): port is { x: number; y: number } => Boolean(port));
 
     const nx = viewportWidth > 1 ? (source.x / viewportWidth - 0.5) * 2 : 0;
     const ny = viewportHeight > 1 ? (source.y / viewportHeight - 0.5) * 2 : 0;
@@ -180,6 +197,22 @@
       rightLength = 1;
     }
 
+    if (thirdPort) {
+      const thirdC1 = {
+        x: branchMid.x + 28 + Math.sin(timeSeconds * 1.7) * 4,
+        y: branchMid.y
+      };
+      const thirdC2 = {
+        x: thirdPort.x - 24,
+        y: thirdPort.y
+      };
+      thirdPath = `M ${fmt(branchMid.x)} ${fmt(branchMid.y)} C ${fmt(thirdC1.x)} ${fmt(thirdC1.y)} ${fmt(thirdC2.x)} ${fmt(thirdC2.y)} ${fmt(thirdPort.x)} ${fmt(thirdPort.y)}`;
+      thirdLength = Math.max(1, distance(branchMid, thirdPort) * 1.18);
+    } else {
+      thirdPath = '';
+      thirdLength = 1;
+    }
+
     trunkLength = Math.max(1, distance(source, branchMid) * 1.22);
 
     if (headerTitle && headerCard) {
@@ -205,6 +238,7 @@
   $: sectionT = clamp01(progress);
   $: hasLeftCard = leftTitle.trim().length > 0 || leftLines.length > 0;
   $: hasRightCard = rightTitle.trim().length > 0 || rightLines.length > 0;
+  $: hasThirdCard = thirdTitle.trim().length > 0 || thirdLines.length > 0;
   // Visibility is controlled by parent content-active windows.
   $: visibleState = active;
   $: trunkReveal = visibleState ? clamp01(sectionT / 0.22) : 0;
@@ -216,6 +250,9 @@
   $: rightIdleFloat = visibleState
     ? Math.sin(animationTime * floatSpeed + floatPhaseOffset) * rightFloatAmplitude
     : 0;
+  $: thirdIdleFloat = visibleState
+    ? Math.sin(animationTime * floatSpeed + thirdFloatPhaseOffset) * thirdFloatAmplitude
+    : 0;
   $: headerIdleFloat = visibleState
     ? Math.sin(animationTime * floatSpeed + headerFloatPhaseOffset) * headerFloatAmplitude
     : 0;
@@ -224,6 +261,7 @@
   $: leftDashOffset = leftLength * (1 - branchReveal);
   $: rightDashOffset = rightLength * (1 - branchReveal);
   $: headerDashOffset = headerLength * (1 - branchReveal);
+  $: thirdDashOffset = thirdLength * (1 - branchReveal);
 
   $: framePerimeterLeft = leftCard
     ? Math.max(1, 2 * (leftCard.clientWidth + leftCard.clientHeight - 4))
@@ -234,6 +272,10 @@
   $: framePerimeterHeader = headerCard
     ? Math.max(1, 2 * (headerCard.clientWidth + headerCard.clientHeight - 4))
     : 1;
+  $: framePerimeterThird = thirdCard
+    ? Math.max(1, 2 * (thirdCard.clientWidth + thirdCard.clientHeight - 4))
+    : 1;
+  $: frameDashThird = framePerimeterThird * (1 - frameReveal);
   $: frameDashLeft = framePerimeterLeft * (1 - frameReveal);
   $: frameDashRight = framePerimeterRight * (1 - frameReveal);
   $: frameDashHeader = framePerimeterHeader * (1 - frameReveal);
@@ -360,6 +402,14 @@
         d={rightPath}
         style:stroke-dasharray={rightLength}
         style:stroke-dashoffset={rightDashOffset}
+      />
+    {/if}
+    {#if hasThirdCard}
+      <path
+        class="wire"
+        d={thirdPath}
+        style:stroke-dasharray={thirdLength}
+        style:stroke-dashoffset={thirdDashOffset}
       />
     {/if}
     {#if headerTitle}
@@ -504,6 +554,50 @@
       {#if rightTags.length > 0}
         <div class="tag-row">
           {#each rightTags as tag}
+            <span class="tag">{tag}</span>
+          {/each}
+        </div>
+      {/if}
+    </article>
+  {/if}
+
+  {#if hasThirdCard}
+    <article
+      bind:this={thirdCard}
+      class="info-card"
+      style={thirdStyle}
+      style:width={thirdWidth}
+      style:transform={`translate3d(0, ${cardLift + thirdIdleFloat}px, 0)`}
+      style:opacity={cardOpacity}
+    >
+      <svg class="frame" aria-hidden="true">
+        <rect
+          x="1"
+          y="1"
+          width="calc(100% - 2px)"
+          height="calc(100% - 2px)"
+          rx="2"
+          ry="2"
+          style:stroke-dasharray={framePerimeterThird}
+          style:stroke-dashoffset={frameDashThird}
+        />
+      </svg>
+      {#if thirdTitle}
+        <h3>{thirdTitle}</h3>
+      {/if}
+      <div class="copy-wrap">
+        {#each thirdLines as line}
+          {#if line.indexOf(':') > -1}
+            {@const idx = line.indexOf(':')}
+            <p><strong>{line.slice(0, idx + 1)}</strong> {line.slice(idx + 1).trim()}</p>
+          {:else}
+            <p>{line}</p>
+          {/if}
+        {/each}
+      </div>
+      {#if thirdTags.length > 0}
+        <div class="tag-row">
+          {#each thirdTags as tag}
             <span class="tag">{tag}</span>
           {/each}
         </div>

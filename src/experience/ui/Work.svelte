@@ -11,7 +11,8 @@
   
   const EXPERIENCE_HEADER_STYLE = 'right: clamp(5rem, 12vw, 8rem); top: clamp(6rem, 10vh, 8rem);';
   const EXPERIENCE_LEFT_STYLE = 'left: clamp(1rem, 2.8vw, 2rem); top: clamp(8rem, 12vh, 10rem);';
-  const EXPERIENCE_RIGHT_STYLE = 'right: clamp(1rem, 4vw, 2.4rem); top: clamp(56vh, 60vh, 66vh);';
+  const EXPERIENCE_RIGHT_STYLE = 'right: clamp(3rem, 10vw, 8rem); top: clamp(56vh, 60vh, 66vh);';
+  const EXPERIENCE_THIRD_STYLE = 'right: clamp(1rem, 4vw, 2.4rem); top: clamp(30vh, 24vh, 28vh);';
 </script>
 
 <BranchCards
@@ -39,8 +40,14 @@
     '• exploring other domains of software engineering',
     'More work coming soon.. (hopefully T_T)'
   ]}
+  thirdTitle="SWE @ ForegoneAI"
+  thirdLines={['Sep 2026 to Present',
+    'Onboarding software engineer!! ヽ(°〇°)ﾉ'
+  ]}
+  thirdStyle={EXPERIENCE_THIRD_STYLE}
+  thirdWidth="clamp(18rem, 28vw, 26rem)"
   leftStyle={EXPERIENCE_LEFT_STYLE}
   rightStyle={EXPERIENCE_RIGHT_STYLE}
   leftWidth="clamp(22rem, 34vw, 36rem)"
-  rightWidth="clamp(18rem, 28vw, 26rem)"
+  rightWidth="clamp(22rem, 28vw, 26rem)"
 />
