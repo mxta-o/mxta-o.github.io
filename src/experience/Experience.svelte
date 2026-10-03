@@ -779,6 +779,7 @@
             <p>mobile support!</p>
             <p>added this update section ur reading rn lol</p>
             <p>updated favicon and image embeds</p>
+            <p>added a new card in experience section</p>
           </div>
         </section>
       {/if}
