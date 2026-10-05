@@ -35,9 +35,9 @@
 >
   <h2>My Vision</h2>
   <div class="subtitles">
-    <p class="subtitle">i don't just write code.</p>
-    <p class="subtitle">i pick things apart until i understand why they scale.</p>
-    <p class="text">still deciding which pile of things to pick apart forever lol..</p>
+    <p class="subtitle">broad enough to build anything end to end</p>
+    <p class="subtitle">deep enough in one thing that people come to me for it</p>
+    <p class="text">thinking of going into graphics eng and performance mayb..</p>
   </div>
 </section>
 
