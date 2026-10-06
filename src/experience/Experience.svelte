@@ -748,7 +748,7 @@
             showSettings = false;
           }}
         >
-          last updated: 10/02/26
+          last updated: 10/04/26
         </button>
         <button
           class="corner-trigger"
