@@ -1,6 +1,7 @@
 # Portfolio
 
 my personal portfolio built with Astro, Svelte, Three.js, and Tailwind CSS.
+alalalalala
 
 ## Tech Stack
 
