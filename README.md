@@ -1,7 +1,7 @@
 # Portfolio
 
 my personal portfolio built with Astro, Svelte, Three.js, and Tailwind CSS.
-alalalalala
+( thinking of making it more omori themed)
 
 ## Tech Stack
 
